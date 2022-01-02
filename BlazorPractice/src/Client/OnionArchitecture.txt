@@ -1,0 +1,63 @@
+﻿オニオンアーキテクチャに従って作られている。
+オニオンアーキテクチャ
+Entity Framework Core
+.NET Core3.1ライブラリ/.NET Standard2.1ライブラリ/ASP.NET Core 3.1 WebApi
+Swagger
+MediatRライブラリを使用したCQRS /メディエーターパターン
+応答のラッパークラス
+CRUDオペレーション
+逆転した依存関係
+APIバージョン管理
+
+★オニオンアーキテクチャって何？
+https://codewithmukesh.com/blog/onion-architecture-in-aspnet-core/
+■3つフォルダを作る（Core、Infrastructure、Presentation）
+・Core：ドメインおよびアプリケーション層プロジェクトが含まれます
+→Domain：.NET標準ライブラリプロジェクト（.NET標準ライブラリにすることで必要に応じて他のソリューションと共有できる）
+基本的に、モデル/エンティティ、例外、検証ルール、設定、およびソリューション全体で非常に一般的なものがすべて含まれています。
+Common / BaseEntity.cs：int Idを持っている抽象クラス
+Entities / ここに、BaseEntityを継承したEntityを作成していく。（フィルタかけない場合は"～Entity"という名前にする必要はない。）
+
+
+→Application：.NET標準ライブラリプロジェクト、Domainを参照する
+このアプリケーションに固有のインターフェイスとタイプが含まれます。
+Install-Package MediatR.Extensions.Microsoft.DependencyInjection
+Install-Package Microsoft.EntityFrameworkCore
+EFロジックがアプリケーション層に分類されず、コアの外側にある永続層に移動するように、IApplicatoinDbContextインターフェイスを追加する。（本体はここには作らない）例えば、もう1個DbContextを追加することになった場合にInfrastructureをもう1個作るってのが簡単になる。
+public interface IApplicationDbContext
+{
+    DbSet<Product> Products { get; set; }       // 作ったEntityを全部列挙
+    Task<int> SaveChanges();
+}
+※このソリューションだとAuditableContextのことかな？
+
+Featuresフォルダ：各機能/エンティティに関連するすべてのロジックが含まれます。
+Products Commands Queriesフォルダ：MediatRをここに分離する。
+ここにCRUDのサンプルがあるので、テンプレート化しちゃうと後が楽かもしれない。
+https://github.com/iammukeshm/OnionArchitecture/tree/master/Application/Features/ProductFeatures
+
+・Infrastructure：ASP.NET Core 3.1 Web Apiのインフラストラクチャに関連するすべてのプロジェクト（認証、永続性など）が含まれます
+→Persistence：.NET CoreLibraryプロジェクト、データベース（EFCore）のレイヤー
+
+
+・Presentation：UIまたはAPIにリンクされているプロジェクト。この場合、このフォルダーはAPIプロジェクトを保持します。
+（※このソリューションだとInfrastructureプロジェクト？）
+→WebApi：ASP.NET Core 3.1 WebApiプロジェクト
+Swaggerを追加する
+XMLファイルを追加する必要があります（Swagger Documentaionの場合。やり方は上のリンク参照）
+appsettings.jsonに接続文字列を追加。
+Install-Package Microsoft.EntityFrameworkCore
+Install-Package Microsoft.EntityFrameworkCore.SqlServer
+
+-----------------------------------
+-----------------------------------
+？WebApiを動かすとき、デフォルトで../weatherforecastに移動しちゃう場合
+launchSettings.json設定を変更する。launchUrlを両方とも"swagger"に変更すると良い。
+
+？上のリンクで、public static class DependencyInjectionの所が同意できない。普通にStartupクラスに書けばいいと思う。
+
+
+
+
+
+
