@@ -5,7 +5,6 @@
 ・パッケージマネージャーコンソールをInsfrastructureプロジェクトにして、update-databaseする。（最初はadd-migration不要）
 ※↑やらなくてもビルド実行したら作られる。
 ・個人的には、IISサーバーバリアントの代わりにKestrelサーバーを使用することをお勧めするらしい。IIS ExpressをBlazorPractice.Serverに変えて実行。
-・
 
 ■機能
 ・メールを送信するためのSMTPサービスが実装されている
@@ -28,3 +27,8 @@ Infrastructure.Sharedプロジェクトに実装を追加し、servicesフォル
 ・ダークモード切替
 ・ローカリゼーション
 ・ハングファイア（負荷監視？）
+
+★プログラムを読む
+■
+
+
