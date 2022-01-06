@@ -58,7 +58,7 @@ namespace BlazorPractice.Client.Shared
 
         private MudTheme _currentTheme;
         private bool _drawerOpen = true;
-        private bool _rightToLeft = false;
+        private bool _rightToLeft = false;      // 使ってない
         private async Task RightToLeftToggle()
         {
             var isRtl = await _clientPreferenceManager.ToggleLayoutDirection();
@@ -137,6 +137,9 @@ namespace BlazorPractice.Client.Shared
             });
         }
 
+        /// <summary>
+        /// ログアウト処理
+        /// </summary>
         private void Logout()
         {
             var parameters = new DialogParameters
@@ -158,9 +161,13 @@ namespace BlazorPractice.Client.Shared
             _drawerOpen = !_drawerOpen;
         }
 
+        /// <summary>
+        /// ダークモード切替
+        /// </summary>
+        /// <returns></returns>
         private async Task DarkMode()
         {
-            bool isDarkMode = await _clientPreferenceManager.ToggleDarkModeAsync();
+            bool isDarkMode = await _clientPreferenceManager.ToggleDarkModeAsync(); // 設定変更と保存
             _currentTheme = isDarkMode
                 ? BlazorHeroTheme.DefaultTheme
                 : BlazorHeroTheme.DarkTheme;

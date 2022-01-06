@@ -109,6 +109,9 @@ namespace BlazorPractice.Client.Infrastructure.Settings
             DefaultBorderRadius = "3px"
         };
 
+        /// <summary>
+        /// 通常モードの色設定
+        /// </summary>
         public static MudTheme DefaultTheme = new MudTheme()
         {
             Palette = new Palette()
@@ -124,6 +127,9 @@ namespace BlazorPractice.Client.Infrastructure.Settings
             LayoutProperties = DefaultLayoutProperties
         };
 
+        /// <summary>
+        /// ダークモードの色設定
+        /// </summary>
         public static MudTheme DarkTheme = new MudTheme()
         {
             Palette = new Palette()

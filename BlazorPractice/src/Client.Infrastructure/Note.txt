@@ -1,0 +1,9 @@
+﻿★Client.Infrastructure
+ここにサーバでやりたい処理のインタフェースを纏めて作っておくことで、
+設計者と実装者の役割分担をしようとかそういう考えだと思う。
+
+■Managers
+ここのクラスはIManagerを実装しており、
+BlazorPractice.Client.Extensions の WebAssemblyHostBuilderExtensions で自動登録される。
+そのため、作るだけでDIされて他から呼べるようになる。
+

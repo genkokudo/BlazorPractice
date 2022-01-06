@@ -28,14 +28,28 @@ namespace BlazorPractice.Client.Infrastructure.Managers.Identity.Account
             return await response.ToResult();
         }
 
+        /// <summary>
+        /// APIを叩き、サーバのコントローラから写真を取得する
+        /// </summary>
+        /// <param name="userId">対象ユーザID</param>
+        /// <returns></returns>
         public async Task<IResult<string>> GetProfilePictureAsync(string userId)
         {
             var response = await _httpClient.GetAsync(Routes.AccountEndpoints.GetProfilePicture(userId));
             return await response.ToResult<string>();
         }
 
+        /// <summary>
+        /// 写真のアップロード処理
+        /// APIでサーバのコントローラにアップロード情報を送信する
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IResult<string>> UpdateProfilePictureAsync(UpdateProfilePictureRequest request, string userId)
         {
+            // APIを叩いてコントローラにUploadのリクエストを送る
+            // BlazorPractice.Server.Controllers.Identity.AccountController
             var response = await _httpClient.PostAsJsonAsync(Routes.AccountEndpoints.UpdateProfilePicture(userId), request);
             return await response.ToResult<string>();
         }

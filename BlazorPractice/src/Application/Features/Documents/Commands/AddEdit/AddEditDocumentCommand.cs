@@ -56,6 +56,7 @@ namespace BlazorPractice.Application.Features.Documents.Commands.AddEdit
                 var doc = _mapper.Map<Document>(command);
                 if (uploadRequest != null)
                 {
+                    // ファイルを保存して、そのパスを取得
                     doc.URL = _uploadService.UploadAsync(uploadRequest);
                 }
                 await _unitOfWork.Repository<Document>().AddAsync(doc);
@@ -72,6 +73,7 @@ namespace BlazorPractice.Application.Features.Documents.Commands.AddEdit
                     doc.IsPublic = command.IsPublic;
                     if (uploadRequest != null)
                     {
+                        // ファイルを保存して、そのパスを取得
                         doc.URL = _uploadService.UploadAsync(uploadRequest);
                     }
                     doc.DocumentTypeId = (command.DocumentTypeId == 0) ? doc.DocumentTypeId : command.DocumentTypeId;

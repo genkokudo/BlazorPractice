@@ -1,0 +1,11 @@
+﻿★Infrastructureプロジェクトについて
+
+■Resources
+多言語対応ファイルを格納する（他のソリューションだと.poファイルだったよね）
+
+■Services
+サービス本体。
+インタフェース定義はApplicationプロジェクトのInterfaces.Servicesにある。
+何故プロジェクトを分けているのか？
+
+

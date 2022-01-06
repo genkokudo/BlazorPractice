@@ -5,10 +5,13 @@ using System.IO;
 
 namespace BlazorPractice.Infrastructure.Services
 {
+    /// <summary>
+    /// ファイルのアップロード処理
+    /// </summary>
     public class UploadService : IUploadService
     {
         /// <summary>
-        /// リクエストのファイルを保存し、そのDBに格納するパスを返す
+        /// リクエストのファイルを保存し、DBに格納するパスを返す
         /// </summary>
         /// <param name="request"></param>
         /// <returns>DBに記録する相対パス</returns>

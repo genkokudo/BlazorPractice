@@ -2,6 +2,9 @@
 
 namespace BlazorPractice.Application.Requests.Identity
 {
+    /// <summary>
+    /// パスワード変更用モデル
+    /// </summary>
     public class ChangePasswordRequest
     {
         [Required]

@@ -16,9 +16,12 @@ namespace BlazorPractice.Client
         {
             var builder = WebAssemblyHostBuilder
                           .CreateDefault(args)
-                          .AddRootComponents()
-                          .AddClientServices();
+                          .AddRootComponents()          // 拡張メソッド："#app"を追加する処理
+                          .AddClientServices();         // 拡張メソッド：StartUpの代わり
             var host = builder.Build();
+
+            // 上でサービスの追加が完了しているので、取り出して初期処理をする
+            // ユーザのブラウザのローカルストレージから、このアプリケーションの表示設定を取得
             var storageService = host.Services.GetRequiredService<ClientPreferenceManager>();
             if (storageService != null)
             {
@@ -31,6 +34,7 @@ namespace BlazorPractice.Client
                 CultureInfo.DefaultThreadCurrentCulture = culture;
                 CultureInfo.DefaultThreadCurrentUICulture = culture;
             }
+
             await builder.Build().RunAsync();
         }
     }

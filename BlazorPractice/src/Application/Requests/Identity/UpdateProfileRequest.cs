@@ -2,6 +2,9 @@
 
 namespace BlazorPractice.Application.Requests.Identity
 {
+    /// <summary>
+    /// プロフィール更新を行うときにサーバに情報を送る
+    /// </summary>
     public class UpdateProfileRequest
     {
         [Required]

@@ -3,6 +3,7 @@
 <MudGrid>
     <MudItem xs="12" sm="4" md="3">
         <MudCard Elevation="25">
+            <!-- 写真の表示 -->
             <MudCardContent>
                 <div class="d-flex justify-center mb-4">
                     @if (!string.IsNullOrEmpty(@ImageDataUrl))
@@ -17,7 +18,10 @@
                 <MudText Typo="Typo.h6" Align="Align.Center">@_profileModel.FirstName @_profileModel.LastName</MudText>
                 <MudText Align="Align.Center">@_profileModel.Email</MudText>
             </MudCardContent>
+            <!-- ボタン操作 -->
             <MudCardActions Class="d-flex justify-center">
+                <!-- razorからはコードビハインドのメソッドを呼ぶことができるので基本的にそれを利用する。InputFileのような標準部品はイベントも用意されており、それをメソッドで受け取れる。 -->
+                <!-- ボタンをクリックすると、隠しフィールドを変更してコードビハインドのUploadFilesメソッドを呼び出す。標準ライブラリのInputFileChangeEventArgsを送る -->
                 <InputFile id="fileInput" OnChange="UploadFiles" hidden />
                 <MudButton HtmlTag="label"
                            Variant="Variant.Text"

@@ -65,6 +65,7 @@ namespace BlazorPractice.Application.Features.Products.Commands.AddEdit
                 var product = _mapper.Map<Product>(command);
                 if (uploadRequest != null)
                 {
+                    // ファイルを保存して、そのパスを取得
                     product.ImageDataURL = _uploadService.UploadAsync(uploadRequest);
                 }
                 await _unitOfWork.Repository<Product>().AddAsync(product);
@@ -80,6 +81,7 @@ namespace BlazorPractice.Application.Features.Products.Commands.AddEdit
                     product.Description = command.Description ?? product.Description;
                     if (uploadRequest != null)
                     {
+                        // ファイルを保存して、そのパスを取得
                         product.ImageDataURL = _uploadService.UploadAsync(uploadRequest);
                     }
                     product.Rate = (command.Rate == 0) ? product.Rate : command.Rate;

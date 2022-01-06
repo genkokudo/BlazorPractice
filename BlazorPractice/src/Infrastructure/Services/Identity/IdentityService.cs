@@ -26,7 +26,7 @@ namespace BlazorPractice.Infrastructure.Services.Identity
         private readonly UserManager<BlazorHeroUser> _userManager;
         private readonly RoleManager<BlazorHeroRole> _roleManager;
         private readonly AppConfiguration _appConfig;
-        private readonly SignInManager<BlazorHeroUser> _signInManager;
+        private readonly SignInManager<BlazorHeroUser> _signInManager;      // 使ってない
         private readonly IStringLocalizer<IdentityService> _localizer;
 
         public IdentityService(

@@ -34,7 +34,7 @@ namespace BlazorPractice.Server.Controllers.Identity
         }
 
         /// <summary>
-        /// Change Password
+        /// パスワード変更
         /// </summary>
         /// <param name="model"></param>
         /// <returns>Status 200 OK</returns>
@@ -45,10 +45,12 @@ namespace BlazorPractice.Server.Controllers.Identity
             return Ok(response);
         }
 
+        // 同じアドレスでもGetすると取得、PostするとUploadになる
         /// <summary>
-        /// Get Profile picture by Id
+        /// IDからプロフィール写真のURLを取得
+        /// 失敗したらメッセージが入る
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="userId">ユーザID</param>
         /// <returns>Status 200 OK </returns>
         [HttpGet("profile-picture/{userId}")]
         [ResponseCache(NoStore = false, Location = ResponseCacheLocation.Client, Duration = 60)]
@@ -58,7 +60,7 @@ namespace BlazorPractice.Server.Controllers.Identity
         }
 
         /// <summary>
-        /// Update Profile Picture
+        /// プロフィール写真のアップロード
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Status 200 OK</returns>

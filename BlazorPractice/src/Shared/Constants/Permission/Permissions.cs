@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace BlazorPractice.Shared.Constants.Permission
 {
+    /// <summary>
+    /// このシステムの権限の種類を定義する
+    /// </summary>
     public static class Permissions
     {
         public static class Products
@@ -112,9 +115,9 @@ namespace BlazorPractice.Shared.Constants.Permission
             public const string Search = "Permissions.AuditTrails.Search";
         }
         /// <summary>
-        /// Returns a list of Permissions.
+        /// 権限のリストを取得する
         /// </summary>
-        /// <returns></returns>
+        /// <returns>権限のリスト</returns>
         public static List<string> GetRegisteredPermissions()
         {
             var permssions = new List<string>();

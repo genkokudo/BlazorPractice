@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Client.Infrastructure.Managers.Identity.Account
 {
+    /// <summary>
+    /// アカウント・プロフィール画面で実行する処理
+    /// </summary>
     public interface IAccountManager : IManager
     {
         Task<IResult> ChangePasswordAsync(ChangePasswordRequest model);

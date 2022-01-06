@@ -46,6 +46,7 @@
 @using BlazorPractice.Client.Infrastructure.Authentication
 @using BlazorPractice.Client.Extensions
 
+@* ここで宣言したものは、各コードビハインドのcsでも呼び出せる *@
 @attribute [Authorize]
 @inject IAuthenticationManager _authenticationManager
 @inject IAccountManager _accountManager

@@ -15,6 +15,9 @@ namespace BlazorPractice.Infrastructure.Models.Identity
         public string LastName { get; set; }
         public string CreatedBy { get; set; }
 
+        /// <summary>
+        /// 写真のURL
+        /// </summary>
         [Column(TypeName = "text")]
         public string ProfilePictureDataUrl { get; set; }
 

@@ -1,5 +1,8 @@
 ﻿namespace BlazorPractice.Shared.Constants.Localization
 {
+    /// <summary>
+    /// 対応言語の列挙
+    /// </summary>
     public static class LocalizationConstants
     {
         public static readonly LanguageCode[] SupportedLanguages = {

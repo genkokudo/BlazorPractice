@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Client.Pages.Identity
 {
+    // 何故か_accountManagerを宣言無しで使っている？
+    // →_Imports.razorで纏めて宣言しているため。後でチェックすること。
+
     public partial class Profile
     {
         private FluentValidationValidator _fluentValidationValidator;
@@ -68,6 +71,12 @@ namespace BlazorPractice.Client.Pages.Identity
         [Parameter]
         public string ImageDataUrl { get; set; }
 
+        /// <summary>
+        /// ファイルをアップロードする
+        /// InputFileタグを使うことでInputFileChangeEventArgsが送られる
+        /// </summary>
+        /// <param name="e">InputFileタグによるイベント</param>
+        /// <returns></returns>
         private async Task UploadFiles(InputFileChangeEventArgs e)
         {
             _file = e.File;
@@ -79,7 +88,10 @@ namespace BlazorPractice.Client.Pages.Identity
                 var imageFile = await e.File.RequestImageFileAsync(format, 400, 400);
                 var buffer = new byte[imageFile.Size];
                 await imageFile.OpenReadStream().ReadAsync(buffer);
+
+                // 写真アップロードのリクエストを作成する
                 var request = new UpdateProfilePictureRequest { Data = buffer, FileName = fileName, Extension = extension, UploadType = Application.Enums.UploadType.ProfilePicture };
+
                 var result = await _accountManager.UpdateProfilePictureAsync(request, UserId);
                 if (result.Succeeded)
                 {
@@ -108,7 +120,9 @@ namespace BlazorPractice.Client.Pages.Identity
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
+                // 写真アップロードのリクエストを作成する
                 var request = new UpdateProfilePictureRequest { Data = null, FileName = string.Empty, UploadType = Application.Enums.UploadType.ProfilePicture };
+
                 var data = await _accountManager.UpdateProfilePictureAsync(request, UserId);
                 if (data.Succeeded)
                 {

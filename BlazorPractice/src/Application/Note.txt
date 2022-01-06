@@ -1,0 +1,8 @@
+﻿★Applicationプロジェクトについて
+
+■Interfaces
+・Services
+本体はInfrastructureプロジェクトのServices。
+何でインタフェースだけ分けているんだろう？
+→ここに集約することでどんなインタフェースがあるのか一元管理するため？
+
