@@ -65,11 +65,11 @@ namespace BlazorPractice.Client.Extensions
                 })
                 .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())     // AutoMapperを使う
                 .AddScoped<ClientPreferenceManager>()                       // IManagerでないものはここで登録、IPreferenceManagerはサーバでも使うのでIManagerにしてクライアント側に登録しない（多分）
-                .AddScoped<BlazorHeroStateProvider>()                       // ????
-                .AddScoped<AuthenticationStateProvider, BlazorHeroStateProvider>()
-                .AddManagers()      // Client.InfrastructureのIManager以下の全サービスを登録
+                .AddScoped<BlazorHeroStateProvider>()                       // ローカルストレージに認証情報を保持することで画面をリロードしてもトークンが期限切れになるまで再度ログインする必要がなくなります。
+                .AddScoped<AuthenticationStateProvider, BlazorHeroStateProvider>()  // AuthenticationStateProviderを使う場所では、代わりにBlazorHeroStateProviderを使用する
+                .AddManagers()                                              // Client.InfrastructureのIManager以下の全サービスを登録
                 .AddExtendedAttributeManagers()
-                .AddTransient<AuthenticationHeaderHandler>()
+                .AddTransient<AuthenticationHeaderHandler>()                // ローカルストレージに認証トークンがあれば、Bearer認証にする
                 .AddScoped(sp => sp
                     .GetRequiredService<IHttpClientFactory>()
                     .CreateClient(ClientName).EnableIntercept(sp))
@@ -79,7 +79,8 @@ namespace BlazorPractice.Client.Extensions
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);
                     client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
                 })
-                .AddHttpMessageHandler<AuthenticationHeaderHandler>();
+                // HttpMessageHandlerは、HttpClient クラス経由での HTTP リクエスト全てに対して独自の処理を追加することが出来る
+                .AddHttpMessageHandler<AuthenticationHeaderHandler>();      // ローカルストレージに認証トークンがあれば、Bearer認証にする
             builder.Services.AddHttpClientInterceptor();
             return builder;
         }
