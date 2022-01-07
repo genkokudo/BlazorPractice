@@ -33,6 +33,11 @@ namespace BlazorPractice.Infrastructure.Extensions
                 .AddTransient(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
         }
 
+        /// <summary>
+        /// 各EntityのCRUDを統一する仕組みを登録しているのだと思う
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddExtendedAttributesUnitOfWork(this IServiceCollection services)
         {
             return services

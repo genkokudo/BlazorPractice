@@ -141,8 +141,13 @@ namespace BlazorPractice.Client.Shared.Components
             }
         }
 
+        /// <summary>
+        /// Excel出力
+        /// </summary>
+        /// <returns></returns>
         private async Task ExportToExcel()
         {
+            // Excel出力機能のクエリを作成して、Mediaterを呼び出す
             var request = new ExportExtendedAttributesQuery<TId, TEntityId, TEntity, TExtendedAttribute>
             {
                 SearchString = _searchString,

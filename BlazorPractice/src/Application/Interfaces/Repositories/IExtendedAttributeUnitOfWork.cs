@@ -9,6 +9,7 @@ namespace BlazorPractice.Application.Interfaces.Repositories
     {
         IRepositoryAsync<T, TId> Repository<T>() where T : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>;
 
+        // 使ってない
         Task<int> Commit(CancellationToken cancellationToken);
 
         Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys);

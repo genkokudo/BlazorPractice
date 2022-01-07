@@ -12,7 +12,9 @@ using System.Threading.Tasks;
 namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
 {
     /// <summary>
-    /// Abstract Extended Attributes Controller Class
+    /// 抽象拡張属性コントローラクラス
+    /// 
+    /// CRUDはこれでまとめている。継承して型引数にEntityを入れるだけでAPIができる
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +25,7 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
             where TId : IEquatable<TId>
     {
         /// <summary>
-        /// Get All Entity Extended Attributes
+        /// 全検索
         /// </summary>
         /// <returns>Status 200 OK</returns>
         [HttpGet]
@@ -46,7 +48,7 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
         }
 
         /// <summary>
-        /// Get Entity Extended Attribute By Id
+        /// IDによる検索
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Status 200 Ok</returns>
@@ -58,7 +60,7 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
         }
 
         /// <summary>
-        /// Create/Update a Entity Extended Attribute
+        /// 新規登録と更新
         /// </summary>
         /// <param name="command"></param>
         /// <returns>Status 200 OK</returns>
@@ -69,7 +71,7 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
         }
 
         /// <summary>
-        /// Delete a Entity Extended Attribute
+        /// 削除
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Status 200 OK</returns>
@@ -80,14 +82,14 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
         }
 
         /// <summary>
-        /// Search Entity Extended Attribute and Export to Excel
+        /// エンティティ拡張属性の検索とExcelへのエクスポート
         /// </summary>
         /// <param name="searchString"></param>
         /// <param name="entityId"></param>
         /// <param name="includeEntity"></param>
         /// <param name="onlyCurrentGroup"></param>
         /// <param name="currentGroup"></param>
-        /// <returns></returns>
+        /// <returns>DataにExcelファイルデータのByte配列を入れる</returns>
         [HttpGet("export")]
         public virtual async Task<IActionResult> Export(string searchString = "", TEntityId entityId = default, bool includeEntity = false, bool onlyCurrentGroup = false, string currentGroup = "")
         {

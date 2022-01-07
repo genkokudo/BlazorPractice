@@ -14,6 +14,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+// Entityの新規登録と更新を行う仕組み
+// QueryではなくCommandという名前だけど、これもMediator。
 namespace BlazorPractice.Application.Features.ExtendedAttributes.Commands.AddEdit
 {
     internal class AddEditExtendedAttributeCommandLocalization

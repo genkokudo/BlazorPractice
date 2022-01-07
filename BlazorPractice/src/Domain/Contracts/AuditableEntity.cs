@@ -2,6 +2,12 @@
 
 namespace BlazorPractice.Domain.Contracts
 {
+    /// <summary>
+    /// IDと監査項目を持たせているEntityの抽象クラス
+    /// 
+    /// でもこれだと[Key]は？
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
     public abstract class AuditableEntity<TId> : IAuditableEntity<TId>
     {
         public TId Id { get; set; }

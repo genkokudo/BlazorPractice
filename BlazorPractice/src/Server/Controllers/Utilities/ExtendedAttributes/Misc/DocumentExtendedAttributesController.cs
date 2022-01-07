@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Misc
 {
+    /// <summary>
+    /// Document用の拡張コントローラ
+    /// ルーティングはBaseクラスで行なっているので、ここでは権限設定だけ
+    /// </summary>
     public class DocumentExtendedAttributesController : ExtendedAttributesController<int, int, Document, DocumentExtendedAttribute>
     {
+        // 権限を細かく設定しているだけで、基本はbaseの処理をそのまま呼んでいるだけ
         [Authorize(Policy = Permissions.DocumentExtendedAttributes.View)]
         public override Task<IActionResult> GetAll()
         {

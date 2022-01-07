@@ -4,6 +4,9 @@ using System;
 
 namespace BlazorPractice.Infrastructure.Models.Identity
 {
+    /// <summary>
+    /// IdentityRoleClaimをカスタムする
+    /// </summary>
     public class BlazorHeroRoleClaim : IdentityRoleClaim<string>, IAuditableEntity<int>
     {
         public string Description { get; set; }

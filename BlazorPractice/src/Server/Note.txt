@@ -1,0 +1,13 @@
+﻿★Serverプロジェクトについて
+
+■Controllers
+APIコントローラを入れるところ。
+・Utilities
+ExtendedAttributesControllerという汎用的なコントローラを作成して、
+各Entityに共通の機能を持たせている。CRUDもこれでできる。
+継承したクラスをMiscフォルダに入れる。
+
+
+
+
+

@@ -11,13 +11,19 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Repositories
 {
+    /// <summary>
+    /// CRUD統一の際、DBの代わりにこれを呼んでいるけど、どういう仕組み？
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="TEntityId"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
     public class ExtendedAttributeUnitOfWork<TId, TEntityId, TEntity> : IExtendedAttributeUnitOfWork<TId, TEntityId, TEntity> where TEntity : AuditableEntity<TEntityId>
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly BlazorHeroContext _dbContext;
         private bool _disposed;
-        private Hashtable _repositories;
-        private readonly IAppCache _cache;
+        private Hashtable _repositories;    // Entity名をキーとしたDbContextのインスタンス
+        private readonly IAppCache _cache;  // LazyCacheというライブラリでキャッシュをしている
 
         public ExtendedAttributeUnitOfWork(BlazorHeroContext dbContext, ICurrentUserService currentUserService, IAppCache cache)
         {
@@ -26,6 +32,11 @@ namespace BlazorPractice.Infrastructure.Repositories
             _cache = cache;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T">監査用に拡張したEntity</typeparam>
+        /// <returns></returns>
         public IRepositoryAsync<T, TId> Repository<T>() where T : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>
         {
             if (_repositories == null)
@@ -45,11 +56,23 @@ namespace BlazorPractice.Infrastructure.Repositories
             return (IRepositoryAsync<T, TId>)_repositories[type];
         }
 
+        /// <summary>
+        /// SaveChangesAsyncをする
+        /// CommitAndRemoveCacheを使ってるので、こっちは呼ばれていない
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<int> Commit(CancellationToken cancellationToken)
         {
             return await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// SaveChangesAsyncをしてキャッシュをクリア
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <param name="cacheKeys">クリアするキャッシュ</param>
+        /// <returns></returns>
         public async Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys)
         {
             var result = await _dbContext.SaveChangesAsync(cancellationToken);

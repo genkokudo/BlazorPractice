@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+// ちゃんと読んでないけどなんやかんやでテーブルを絞り込み条件通りにExcelのByte配列にしてくれるのだと思う
 namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.Export
 {
     internal class ExportExtendedAttributesQueryLocalization
@@ -22,6 +23,13 @@ namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.Export
         // for localization
     }
 
+    /// <summary>
+    /// Excel出力機能のクエリ
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="TEntityId"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TExtendedAttribute"></typeparam>
     public class ExportExtendedAttributesQuery<TId, TEntityId, TEntity, TExtendedAttribute>
         : IRequest<Result<string>>
             where TEntity : AuditableEntity<TEntityId>, IEntityWithExtendedAttributes<TExtendedAttribute>, IEntity<TEntityId>
@@ -44,6 +52,13 @@ namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.Export
         }
     }
 
+    /// <summary>
+    /// Excel出力機能ハンドラ
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="TEntityId"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TExtendedAttribute"></typeparam>
     internal class ExportExtendedAttributesQueryHandler<TId, TEntityId, TEntity, TExtendedAttribute>
         : IRequestHandler<ExportExtendedAttributesQuery<TId, TEntityId, TEntity, TExtendedAttribute>, Result<string>>
             where TEntity : AuditableEntity<TEntityId>, IEntityWithExtendedAttributes<TExtendedAttribute>, IEntity<TEntityId>
@@ -70,8 +85,7 @@ namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.Export
                 .Specify(extendedAttributeFilterSpec)
                 .ToListAsync(cancellationToken);
 
-            // check SearchString outside of specification because of
-            // an expression tree lambda may not contain a null propagating operator
+            // 式木ラムダがNULL伝搬演算子を含まないため、SearchStringが仕様外であることを確認する。
             if (!string.IsNullOrWhiteSpace(request.SearchString))
             {
                 extendedAttributes = extendedAttributes.Where(p =>

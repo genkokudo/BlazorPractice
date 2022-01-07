@@ -117,6 +117,11 @@ namespace BlazorPractice.Client.Extensions
             return services;
         }
 
+        /// <summary>
+        /// ExtendedAttributeManagerをサービス登録する
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         public static IServiceCollection AddExtendedAttributeManagers(this IServiceCollection services)
         {
             //TODO - add managers with reflection!

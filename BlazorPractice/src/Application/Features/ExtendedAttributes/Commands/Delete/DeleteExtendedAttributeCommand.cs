@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+// IDによるEntity削除
+// QueryではなくCommandという名前だけど、これもMediator。
+// DB呼んでないけどどういう仕組み？
 namespace BlazorPractice.Application.Features.ExtendedAttributes.Commands.Delete
 {
     internal class DeleteExtendedAttributeCommandLocalization

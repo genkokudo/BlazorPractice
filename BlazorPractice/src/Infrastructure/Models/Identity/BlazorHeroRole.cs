@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace BlazorPractice.Infrastructure.Models.Identity
 {
+    /// <summary>
+    /// 権限情報をカスタムする
+    /// </summary>
     public class BlazorHeroRole : IdentityRole, IAuditableEntity<string>
     {
         public string Description { get; set; }

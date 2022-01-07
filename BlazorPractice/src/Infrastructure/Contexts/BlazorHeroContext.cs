@@ -13,7 +13,12 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Contexts
 {
-    public class BlazorHeroContext : AuditableContext
+    // 結局、プライマリキーの設定をどこでやっているのかわからなかった
+
+    /// <summary>
+    /// このシステムのDbContext
+    /// </summary>
+    public class BlazorHeroContext : AuditableContext   // 監査項目の更新機能を持たせる
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTimeService _dateTimeService;
@@ -32,6 +37,12 @@ namespace BlazorPractice.Infrastructure.Contexts
         public DbSet<DocumentType> DocumentTypes { get; set; }
         public DbSet<DocumentExtendedAttribute> DocumentExtendedAttributes { get; set; }
 
+        /// <summary>
+        /// CreatedByなどを入力する機能を追加
+        /// ※SaveChangesは変えてないので注意
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
         {
             foreach (var entry in ChangeTracker.Entries<IAuditableEntity>().ToList())
@@ -61,13 +72,17 @@ namespace BlazorPractice.Infrastructure.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // decimalの桁数は固定する
             foreach (var property in builder.Model.GetEntityTypes()
             .SelectMany(t => t.GetProperties())
             .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
             {
                 property.SetColumnType("decimal(18,2)");
             }
+
             base.OnModelCreating(builder);
+            
+            // 各テーブルの紐づけを設定
             builder.Entity<ChatHistory<BlazorHeroUser>>(entity =>
             {
                 entity.ToTable("ChatHistory");
@@ -82,12 +97,15 @@ namespace BlazorPractice.Infrastructure.Contexts
                     .HasForeignKey(d => d.ToUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
             });
+
+            // カスタムしたユーザ情報は、ここで手動で紐づける
             builder.Entity<BlazorHeroUser>(entity =>
             {
                 entity.ToTable(name: "Users", "Identity");
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
             });
 
+            // カスタムした権限もここで紐づけ
             builder.Entity<BlazorHeroRole>(entity =>
             {
                 entity.ToTable(name: "Roles", "Identity");

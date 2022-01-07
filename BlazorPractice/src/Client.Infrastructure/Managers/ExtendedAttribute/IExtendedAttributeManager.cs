@@ -10,6 +10,14 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Client.Infrastructure.Managers.ExtendedAttribute
 {
+    /// <summary>
+    /// 各エンティティに共通の機能を持たせようとしている？
+    /// WebAssemblyHostBuilderExtensionsで登録させて、DIできるようにしている？
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="TEntityId"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TExtendedAttribute"></typeparam>
     public interface IExtendedAttributeManager<TId, TEntityId, TEntity, TExtendedAttribute>
         where TEntity : AuditableEntity<TEntityId>, IEntityWithExtendedAttributes<TExtendedAttribute>, IEntity<TEntityId>
         where TExtendedAttribute : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>, IEntity<TId>
@@ -23,6 +31,11 @@ namespace BlazorPractice.Client.Infrastructure.Managers.ExtendedAttribute
 
         Task<IResult<TId>> DeleteAsync(TId id);
 
+        /// <summary>
+        /// Excelデータにして出力する
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>response.DataがExcelデータのByteArray</returns>
         Task<IResult<string>> ExportToExcelAsync(ExportExtendedAttributesQuery<TId, TEntityId, TEntity, TExtendedAttribute> request);
     }
 }

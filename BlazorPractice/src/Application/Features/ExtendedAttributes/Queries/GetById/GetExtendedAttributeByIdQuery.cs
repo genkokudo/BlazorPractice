@@ -7,6 +7,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+// IDによってEntityを検索する
 namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.GetById
 {
     public class GetExtendedAttributeByIdQuery<TId, TEntityId, TEntity, TExtendedAttribute>

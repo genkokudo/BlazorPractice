@@ -48,7 +48,7 @@ namespace BlazorPractice.Server
             services.AddApplicationLayer();
             services.AddApplicationServices();
             services.AddRepositories();
-            services.AddExtendedAttributesUnitOfWork();
+            services.AddExtendedAttributesUnitOfWork(); // 各EntityのCRUDを統一する仕組みを登録しているのだと思う // どうやらUnitOfWorkという考え方があるらしい。
             services.AddSharedInfrastructure(_configuration);
             services.RegisterSwagger();
             services.AddInfrastructureMappings();

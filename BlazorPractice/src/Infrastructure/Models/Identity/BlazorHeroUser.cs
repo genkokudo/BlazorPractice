@@ -8,6 +8,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazorPractice.Infrastructure.Models.Identity
 {
+    /// <summary>
+    /// ユーザ情報をカスタムする
+    /// </summary>
     public class BlazorHeroUser : IdentityUser<string>, IChatUser, IAuditableEntity<string>
     {
         public string FirstName { get; set; }
