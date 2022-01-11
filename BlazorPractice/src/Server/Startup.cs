@@ -40,7 +40,7 @@ namespace BlazorPractice.Server
             services.AddCurrentUserService();
             services.AddSerialization();
             services.AddDatabase(_configuration);
-            services.AddServerStorage(); //TODO - should implement ServerStorageProvider to work correctly!
+            services.AddServerStorage(); //TODO - 正しく動作させるためには、ServerStorageProviderを実装する必要があります！
             services.AddScoped<ServerPreferenceManager>();
             services.AddServerLocalization();
             services.AddIdentity();

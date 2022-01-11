@@ -5,6 +5,13 @@ using System;
 
 namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.GetById
 {
+    /// <summary>
+    /// DBから取り出したデータから拡張項目も取得したクライアント用データ
+    /// APIのレスポンスに使用される
+    /// AutoMapperで変換（BlazorPractice.Application.Mappingsでマッピング設定）
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="TEntityId"></typeparam>
     public class GetExtendedAttributeByIdResponse<TId, TEntityId> : IEntityAuditableExtendedAttribute
     {
         public TId Id { get; set; }

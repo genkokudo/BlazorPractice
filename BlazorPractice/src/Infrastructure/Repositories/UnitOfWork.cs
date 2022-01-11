@@ -11,13 +11,20 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Repositories
 {
+    /// <summary>
+    /// リポジトリが複数あるシステムの場合、片方が更新失敗しても大丈夫なように間に1クラス挟む
+    /// このシステムはリポジトリが1つしかないので、あまり意味が無いはず
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
+
     public class UnitOfWork<TId> : IUnitOfWork<TId>
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly BlazorHeroContext _dbContext;
         private bool disposed;
         private Hashtable _repositories;
-        private readonly IAppCache _cache;
+        /// <summary>LazyCacheというライブラリを使用</summary>
+        private readonly IAppCache _cache;  // BlazorPractice.Shared.Constants.Application.ApplicationConstants.Cacheで定義されているキーでキャッシュ
 
         public UnitOfWork(BlazorHeroContext dbContext, ICurrentUserService currentUserService, IAppCache cache)
         {
@@ -78,7 +85,7 @@ namespace BlazorPractice.Infrastructure.Repositories
             {
                 if (disposing)
                 {
-                    //dispose managed resources
+                    // 管理しているリソースを破棄
                     _dbContext.Dispose();
                 }
             }

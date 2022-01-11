@@ -25,7 +25,7 @@ namespace BlazorPractice.Infrastructure.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             return services
-                .AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>))
+                .AddTransient(typeof(IRepositoryAsync<,>), typeof(RepositoryAsync<,>))  // 型引数でEntityを指定することで、DbContextに対するCRUDを統一する
                 .AddTransient<IProductRepository, ProductRepository>()
                 .AddTransient<IBrandRepository, BrandRepository>()
                 .AddTransient<IDocumentRepository, DocumentRepository>()
@@ -34,7 +34,7 @@ namespace BlazorPractice.Infrastructure.Extensions
         }
 
         /// <summary>
-        /// 各EntityのCRUDを統一する仕組みを登録しているのだと思う
+        /// UnitOfWorkによって、複数リポジトリの更新不整合を防止する
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>

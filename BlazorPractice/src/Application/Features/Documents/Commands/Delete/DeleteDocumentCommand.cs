@@ -36,7 +36,7 @@ namespace BlazorPractice.Application.Features.Documents.Commands.Delete
             {
                 await _unitOfWork.Repository<Document>().DeleteAsync(document);
 
-                // delete all caches related with deleted entity
+                // 削除されたエンティティに関連する全てのキャッシュを削除する。
                 var cacheKeys = await documentsWithExtendedAttributes.SelectMany(x => x.ExtendedAttributes).Where(x => x.EntityId == command.Id).Distinct().Select(x => ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(nameof(Document), x.EntityId))
                     .ToListAsync(cancellationToken);
                 cacheKeys.Add(ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(nameof(Document)));

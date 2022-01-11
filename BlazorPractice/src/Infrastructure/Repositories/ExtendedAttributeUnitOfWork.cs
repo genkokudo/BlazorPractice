@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Repositories
 {
+
     /// <summary>
-    /// CRUD統一の際、DBの代わりにこれを呼んでいるけど、どういう仕組み？
+    /// UnitOfWorkとは、複数のリポジトリの更新不整合を防止する仕組み
+    /// dbContextが1個しかないなら要らないんじゃないかな
     /// </summary>
     /// <typeparam name="TId"></typeparam>
     /// <typeparam name="TEntityId"></typeparam>
@@ -23,7 +25,7 @@ namespace BlazorPractice.Infrastructure.Repositories
         private readonly BlazorHeroContext _dbContext;
         private bool _disposed;
         private Hashtable _repositories;    // Entity名をキーとしたDbContextのインスタンス
-        private readonly IAppCache _cache;  // LazyCacheというライブラリでキャッシュをしている
+        private readonly IAppCache _cache;  // LazyCacheというライブラリでDBのキャッシュをしている
 
         public ExtendedAttributeUnitOfWork(BlazorHeroContext dbContext, ICurrentUserService currentUserService, IAppCache cache)
         {
@@ -68,10 +70,11 @@ namespace BlazorPractice.Infrastructure.Repositories
         }
 
         /// <summary>
+        /// DBの更新が行われるので、キャッシュを更新する必要がある時に呼ばれる
         /// SaveChangesAsyncをしてキャッシュをクリア
         /// </summary>
         /// <param name="cancellationToken"></param>
-        /// <param name="cacheKeys">クリアするキャッシュ</param>
+        /// <param name="cacheKeys">クリアするキャッシュのキー(BlazorPractice.Shared.Constants.Application.ApplicationConstants.Cache)</param>
         /// <returns></returns>
         public async Task<int> CommitAndRemoveCache(CancellationToken cancellationToken, params string[] cacheKeys)
         {

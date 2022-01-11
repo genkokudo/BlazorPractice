@@ -15,6 +15,11 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
     /// 抽象拡張属性コントローラクラス
     /// 
     /// CRUDはこれでまとめている。継承して型引数にEntityを入れるだけでAPIができる
+    /// TEntityはEntityクラスの型、TExtendedAttributeはTEntityを型引数に作成したAuditableEntityExtendedAttributeクラス
+    /// 
+    /// APIなので、クライアント用のデータにAutoMapperで変換したものが返される
+    /// 
+    /// TIdはAuditableEntityのID、TEntityIdはIEntityのIDなので、何故両方持たせる必要があるのか謎。
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -36,7 +41,7 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
         }
 
         /// <summary>
-        /// Get All Entity Extended Attributes by entity id
+        /// エンティティIDによる全エントリ拡張属性の取得
         /// </summary>
         /// <param name="entityId"></param>
         /// <returns>Status 200 OK</returns>
@@ -49,6 +54,7 @@ namespace BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base
 
         /// <summary>
         /// IDによる検索
+        /// AutoMapperによってクライアント用のデータ形式（？）に変換して取得している
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Status 200 Ok</returns>

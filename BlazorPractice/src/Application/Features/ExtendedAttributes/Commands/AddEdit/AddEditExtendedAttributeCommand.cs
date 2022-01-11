@@ -78,7 +78,7 @@ namespace BlazorPractice.Application.Features.ExtendedAttributes.Commands.AddEdi
                 await _unitOfWork.Repository<TExtendedAttribute>().AddAsync(extendedAttribute);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(typeof(TEntity).Name));
 
-                // delete all caches related with added entity
+                // 追加されたエンティティに関連する全てのキャッシュを削除する。
                 var cacheKeys = await _unitOfWork.Repository<TExtendedAttribute>().Entities.Select(x =>
                     ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(
                         typeof(TEntity).Name, x.Entity.Id)).Distinct().ToArrayAsync(cancellationToken);
@@ -105,7 +105,7 @@ namespace BlazorPractice.Application.Features.ExtendedAttributes.Commands.AddEdi
                     await _unitOfWork.Repository<TExtendedAttribute>().UpdateAsync(extendedAttribute);
                     await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(typeof(TEntity).Name));
 
-                    // delete all caches related with updated entity
+                    // 更新されたエンティティに関連するすべてのキャッシュを削除する。
                     var cacheKeys = await _unitOfWork.Repository<TExtendedAttribute>().Entities.Select(x =>
                         ApplicationConstants.Cache.GetAllEntityExtendedAttributesByEntityIdCacheKey(
                             typeof(TEntity).Name, x.Entity.Id)).Distinct().ToArrayAsync(cancellationToken);

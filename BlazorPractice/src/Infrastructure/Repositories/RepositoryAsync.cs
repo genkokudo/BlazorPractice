@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Repositories
 {
+    /// <summary>
+    /// 各テーブルのCRUDを行うdbContextラッパー
+    /// 型引数を使うことで、CRUDのコードを統一する
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TId"></typeparam>
     public class RepositoryAsync<T, TId> : IRepositoryAsync<T, TId> where T : AuditableEntity<TId>
     {
         private readonly BlazorHeroContext _dbContext;
@@ -25,6 +31,11 @@ namespace BlazorPractice.Infrastructure.Repositories
             return entity;
         }
 
+        /// <summary>
+        /// DBから対象レコードを削除
+        /// </summary>
+        /// <param name="entity">削除対象エンティティ</param>
+        /// <returns></returns>
         public Task DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);

@@ -5,6 +5,12 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Application.Interfaces.Repositories
 {
+    /// <summary>
+    /// DbContextをラップして、各EntityのCRUDのコードを統一する
+    /// 削除や更新でコミットはしていないみたい
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TId"></typeparam>
     public interface IRepositoryAsync<T, in TId> where T : class, IEntity<TId>
     {
         IQueryable<T> Entities { get; }
@@ -19,6 +25,11 @@ namespace BlazorPractice.Application.Interfaces.Repositories
 
         Task UpdateAsync(T entity);
 
+        /// <summary>
+        /// 対象をDBから削除
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         Task DeleteAsync(T entity);
     }
 }

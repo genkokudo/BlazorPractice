@@ -5,6 +5,8 @@ using System;
 
 namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.GetAllByEntityId
 {
+    // TIdはAuditableEntityのID、TEntityIdはIEntityのIDなので両方とも一意だと思うんだけど、何故両方持たせるのか分からない
+
     public class GetAllExtendedAttributesByEntityIdResponse<TId, TEntityId> : IEntityAuditableExtendedAttribute
     {
         public TId Id { get; set; }

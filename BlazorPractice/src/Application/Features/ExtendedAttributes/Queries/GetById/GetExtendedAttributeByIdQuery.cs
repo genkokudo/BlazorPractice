@@ -36,7 +36,10 @@ namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.GetById
 
         public async Task<Result<GetExtendedAttributeByIdResponse<TId, TEntityId>>> Handle(GetExtendedAttributeByIdQuery<TId, TEntityId, TEntity, TExtendedAttribute> query, CancellationToken cancellationToken)
         {
+            // 検索する
             var extendedAttribute = await _unitOfWork.Repository<TExtendedAttribute>().GetByIdAsync(query.Id);
+
+            // AutoMapperで変換し、APIレスポンス用のデータ（フロント用データ）にする
             var mappedExtendedAttribute = _mapper.Map<GetExtendedAttributeByIdResponse<TId, TEntityId>>(extendedAttribute);
             return await Result<GetExtendedAttributeByIdResponse<TId, TEntityId>>.SuccessAsync(mappedExtendedAttribute);
         }

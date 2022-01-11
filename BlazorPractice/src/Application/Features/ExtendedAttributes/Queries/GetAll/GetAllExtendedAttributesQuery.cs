@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 // 対象テーブルを全検索する
+// TEntity, TExtendedAttributeを指定することで、対象テーブルの検索を行える
+// テーブルごとキャッシュする処理も行う
 namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.GetAll
 {
     public class GetAllExtendedAttributesQuery<TId, TEntityId, TEntity, TExtendedAttribute>
@@ -42,8 +44,14 @@ namespace BlazorPractice.Application.Features.ExtendedAttributes.Queries.GetAll
 
         public async Task<Result<List<GetAllExtendedAttributesResponse<TId, TEntityId>>>> Handle(GetAllExtendedAttributesQuery<TId, TEntityId, TEntity, TExtendedAttribute> request, CancellationToken cancellationToken)
         {
+            // UnitOfWorkでラッピングしたクラスから全検索処理
             Func<Task<List<TExtendedAttribute>>> getAllExtendedAttributes = () => _unitOfWork.Repository<TExtendedAttribute>().GetAllAsync();
+
+            // キャッシュ処理
+            // キャッシュキーを取得して、テーブルごとキャッシュする
             var extendedAttributeList = await _cache.GetOrAddAsync(ApplicationConstants.Cache.GetAllEntityExtendedAttributesCacheKey(typeof(TEntity).Name), getAllExtendedAttributes);
+
+            // AutoMapperでクライアント用のデータに変換する
             var mappedExtendedAttributes = _mapper.Map<List<GetAllExtendedAttributesResponse<TId, TEntityId>>>(extendedAttributeList);
             return await Result<List<GetAllExtendedAttributesResponse<TId, TEntityId>>>.SuccessAsync(mappedExtendedAttributes);
         }
