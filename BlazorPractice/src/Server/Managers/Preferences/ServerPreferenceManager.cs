@@ -11,6 +11,7 @@ namespace BlazorPractice.Server.Managers.Preferences
 {
     /// <summary>
     /// サーバ側の設定管理
+    /// ローカライズの管理
     /// </summary>
     public class ServerPreferenceManager : IServerPreferenceManager
     {

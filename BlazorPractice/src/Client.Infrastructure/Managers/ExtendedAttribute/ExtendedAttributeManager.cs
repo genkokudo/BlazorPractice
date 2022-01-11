@@ -17,8 +17,8 @@ namespace BlazorPractice.Client.Infrastructure.Managers.ExtendedAttribute
     /// 多分、各エンティティに機能を持たせようとしている
     /// Excel出力とか
     /// </summary>
-    /// <typeparam name="TId"></typeparam>
-    /// <typeparam name="TEntityId"></typeparam>
+    /// <typeparam name="TId">AuditableEntityのID</typeparam>
+    /// <typeparam name="TEntityId">IEntityのID</typeparam>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TExtendedAttribute"></typeparam>
     public class ExtendedAttributeManager<TId, TEntityId, TEntity, TExtendedAttribute>

@@ -17,6 +17,9 @@ using System.IO;
 
 namespace BlazorPractice.Server
 {
+    /// <summary>
+    /// サーバプログラムの設定
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -26,31 +29,33 @@ namespace BlazorPractice.Server
 
         private readonly IConfiguration _configuration;
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        // このメソッドはランタイムから呼び出される。コンテナにサービスを追加するには、このメソッドを使用します。
+        // アプリケーションの設定方法の詳細について https://go.microsoft.com/fwlink/?LinkID=398940
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
-            services.AddSignalR();
-            services.AddLocalization(options =>
+            // ServiceCollectionExtensionsにいくつか拡張メソッドを作成しているので、そちらも参照すること
+
+            services.AddCors();         // クロスオリジン要求 (CORS) を有効にする
+            services.AddSignalR();      // SignalRを使用する
+            services.AddLocalization(options => // ローカライズファイルのパスを指定する
             {
                 options.ResourcesPath = "Resources";
             });
-            services.AddCurrentUserService();
-            services.AddSerialization();
-            services.AddDatabase(_configuration);
+            services.AddCurrentUserService();               // 現在のユーザのClainやIDを取得するアクセサをサービス登録する
+            services.AddSerialization();                    // Jsonシリアライザをサービス登録する
+            services.AddDatabase(_configuration);           // DBを登録する
             services.AddServerStorage(); //TODO - 正しく動作させるためには、ServerStorageProviderを実装する必要があります！
-            services.AddScoped<ServerPreferenceManager>();
-            services.AddServerLocalization();
+            services.AddScoped<ServerPreferenceManager>();  // サーバ側の設定管理を登録する
+            services.AddServerLocalization();               // ローカライズサービスを登録する
             services.AddIdentity();
             services.AddJwtAuthentication(services.GetApplicationSettings(_configuration));
             services.AddApplicationLayer();
             services.AddApplicationServices();
             services.AddRepositories();
-            services.AddExtendedAttributesUnitOfWork(); // 各EntityのCRUDを統一する仕組みを登録しているのだと思う // どうやらUnitOfWorkという考え方があるらしい。
+            services.AddExtendedAttributesUnitOfWork();     // UnitOfWorkという実装パターンで、DBの一貫性を保つ
             services.AddSharedInfrastructure(_configuration);
-            services.RegisterSwagger();
+            services.RegisterSwagger();                     // Swaggerを利用する
             services.AddInfrastructureMappings();
             services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();

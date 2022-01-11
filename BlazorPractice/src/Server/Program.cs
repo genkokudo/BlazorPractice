@@ -22,8 +22,8 @@ namespace BlazorPractice.Server
 
                 try
                 {
+                    // DBの初期化、マイグレーション
                     var context = services.GetRequiredService<BlazorHeroContext>();
-
                     if (context.Database.IsSqlServer())
                     {
                         context.Database.Migrate();
@@ -44,11 +44,11 @@ namespace BlazorPractice.Server
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .UseSerilog()
+            .UseSerilog()       // HostBuilderExtensionsで拡張している
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStaticWebAssets();
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>();       // 細かい初期化内容はStartupを参照
                 });
     }
 }

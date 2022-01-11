@@ -2,6 +2,10 @@
 
 namespace BlazorPractice.Server.Localization
 {
+    /// <summary>
+    /// ローカライズサービス
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     internal class ServerLocalizer<T> where T : class
     {
         public IStringLocalizer<T> Localizer { get; }

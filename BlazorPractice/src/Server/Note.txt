@@ -3,6 +3,9 @@
 片方のテーブルが更新できて、もう片方が更新失敗をしてしまうと一貫性が保てない。
 そこで、DbContextをラッピングしてトランザクション管理をする層を作っておく。
 
+TIdはAuditableEntityのID、TEntityIdはIEntityのIDでどちらも一意のはず。何故両方とも各レコードに持たせているのかが分からない。
+TIdでもTEntityIdでも検索できるようになっている。
+
 ★LazyCacheについて
 DBのキャッシュをしている
 ApplicationConstants.Cacheでキャッシュキーを生成して使う。

@@ -64,7 +64,7 @@ namespace BlazorPractice.Server.Extensions
             var storageService = serviceProvider.GetService<ServerPreferenceManager>();
             if (storageService != null)
             {
-                // TODO - should implement ServerStorageProvider to work correctly!
+                // TODO - ServerStorageProviderを実装しなければ、正しく動作しません！
                 CultureInfo culture;
                 var preference = await storageService.GetPreference() as ServerPreference;
                 if (preference != null)
@@ -93,6 +93,11 @@ namespace BlazorPractice.Server.Extensions
             return applicationSettingsConfiguration.Get<AppConfiguration>();
         }
 
+        /// <summary>
+        /// Swaggerを有効にする
+        /// （APIドキュメントの自動生成）
+        /// </summary>
+        /// <param name="services"></param>
         internal static void RegisterSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(async c =>
@@ -157,6 +162,11 @@ namespace BlazorPractice.Server.Extensions
             });
         }
 
+        /// <summary>
+        /// Jsonシリアライザをサービス登録する
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         internal static IServiceCollection AddSerialization(this IServiceCollection services)
         {
             services
@@ -168,10 +178,16 @@ namespace BlazorPractice.Server.Extensions
                 });
             services.AddScoped<IJsonSerializerSettings, NewtonsoftJsonSettings>();
 
-            services.AddScoped<IJsonSerializer, SystemTextJsonSerializer>(); // you can change it
+            services.AddScoped<IJsonSerializer, SystemTextJsonSerializer>(); // 変更可能
             return services;
         }
 
+        /// <summary>
+        /// データベースをサービス登録する
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         internal static IServiceCollection AddDatabase(
             this IServiceCollection services,
             IConfiguration configuration)
@@ -180,9 +196,14 @@ namespace BlazorPractice.Server.Extensions
                     .UseSqlServer(configuration.GetConnectionString("DefaultConnection")))
             .AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 
+        /// <summary>
+        /// 現在のユーザのClainやIDを取得するアクセサを登録する
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         internal static IServiceCollection AddCurrentUserService(this IServiceCollection services)
         {
-            services.AddHttpContextAccessor();
+            services.AddHttpContextAccessor();  // IHttpContextAccessorについてデフォルトの実装を追加
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             return services;
         }
