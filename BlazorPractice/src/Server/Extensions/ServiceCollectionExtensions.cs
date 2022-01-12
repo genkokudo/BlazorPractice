@@ -208,19 +208,28 @@ namespace BlazorPractice.Server.Extensions
             return services;
         }
 
+        /// <summary>
+        /// ポリシー判定サービスやパスワードポリシーの設定
+        /// カスタムしたユーザと権限情報の使用設定
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         internal static IServiceCollection AddIdentity(this IServiceCollection services)
         {
             services
-                .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>()
-                .AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>()
+                .AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>() // カスタム認可ポリシー プロバイダー：ポリシー名を指定して、その認可ポリシーを取得する
+                .AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>()     // ユーザのClaimから必要な権限があるかを探して、許可の判定をする（いつ行われるの？）
                 .AddIdentity<BlazorHeroUser, BlazorHeroRole>(options =>
                 {
-                    options.Password.RequiredLength = 6;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                    options.User.RequireUniqueEmail = true;
+                    // パスワードポリシーを設定
+                    options.Password.RequiredLength = 6;                // 6文字
+                    options.Password.RequireDigit = false;              // 数字を混ぜない
+                    options.Password.RequireLowercase = false;          // 小文字が含まれなくてよい
+                    options.Password.RequireNonAlphanumeric = false;    // 非英数字を含まなくてもよい
+                    options.Password.RequireUppercase = false;          // 大文字を含めなくても良い
+
+                    // ユーザの設定
+                    options.User.RequireUniqueEmail = true;             // Emailの重複禁止
                 })
                 .AddEntityFrameworkStores<BlazorHeroContext>()
                 .AddDefaultTokenProviders();
@@ -250,15 +259,24 @@ namespace BlazorPractice.Server.Extensions
             return services;
         }
 
+        // ここで設定しているポリシーは、[Authorize(Policy = Permissions.Products.View)]みたいに使用する
+        /// <summary>
+        /// Bearer認証を設定する
+        /// Permissionsクラスに設定している権限を全てポリシーに設定する
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
         internal static IServiceCollection AddJwtAuthentication(
             this IServiceCollection services, AppConfiguration config)
         {
+            // この辺でBearer認証を設定する
             var key = Encoding.ASCII.GetBytes(config.Secret);
             services
                 .AddAuthentication(authentication =>
                 {
-                    authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    authentication.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  // "Bearer"認証
+                    authentication.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;     // "Bearer"認証
                 })
                 .AddJwtBearer(async bearer =>
                 {
@@ -317,14 +335,19 @@ namespace BlazorPractice.Server.Extensions
                         },
                     };
                 });
+
+            // Permissionsクラスに必要な権限/役割を定数で保存しているので、それを取得
+            // 全てAddPolicyする
             services.AddAuthorization(options =>
             {
-                // Here I stored necessary permissions/roles in a constant
+                // Public, Static, 階層上位のPublic/Static
                 foreach (var prop in typeof(Permissions).GetNestedTypes().SelectMany(c => c.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)))
                 {
                     var propertyValue = prop.GetValue(null);
                     if (propertyValue is not null)
                     {
+                        // ポリシー名と権限判定ロジックを指定する（全部RequireClaimにする）
+                        // ここで設定すると、IAuthorizationHandlerによって、要件が満たされているかどうかがチェックされる（AddIdentityで設定してるやつ）
                         options.AddPolicy(propertyValue.ToString(), policy => policy.RequireClaim(ApplicationClaimTypes.Permission, propertyValue.ToString()));
                     }
                 }

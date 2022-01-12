@@ -48,8 +48,8 @@ namespace BlazorPractice.Server
             services.AddServerStorage(); //TODO - 正しく動作させるためには、ServerStorageProviderを実装する必要があります！
             services.AddScoped<ServerPreferenceManager>();  // サーバ側の設定管理を登録する
             services.AddServerLocalization();               // ローカライズサービスを登録する
-            services.AddIdentity();
-            services.AddJwtAuthentication(services.GetApplicationSettings(_configuration));
+            services.AddIdentity();                         // ポリシー判定サービスやパスワードポリシーの設定、カスタムしたユーザと権限情報
+            services.AddJwtAuthentication(services.GetApplicationSettings(_configuration)); // ポリシーの種類と判定方法（特定の年齢以下は禁止みたいなの）を登録
             services.AddApplicationLayer();
             services.AddApplicationServices();
             services.AddRepositories();

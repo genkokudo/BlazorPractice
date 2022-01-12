@@ -161,6 +161,7 @@ namespace BlazorPractice.Client.Infrastructure.Authentication
                     }
                     else
                     {
+                        // 新しいClaim
                         claims.Add(new Claim(ApplicationClaimTypes.Permission, permissions.ToString()));
                     }
                     keyValuePairs.Remove(ApplicationClaimTypes.Permission);

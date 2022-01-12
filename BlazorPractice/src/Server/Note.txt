@@ -11,6 +11,11 @@ DBのキャッシュをしている
 ApplicationConstants.Cacheでキャッシュキーを生成して使う。
 検索メソッドをデリゲートで書くのがポイント。GetOrAddAsyncというメソッドでキャッシュがあれば取得、無ければ第2引数のデリゲートを実行してキャッシュ登録という仕組み
 
+★ポリシーによる認証について
+Startupで行われている設定で、以下の事を行っている
+・AddIdentity：ポリシー権限判定方法の設定
+・AddJwtAuthentication：ポリシーの種類と判定ロジックの登録
+ここで設定しているポリシーは、[Authorize(Policy = Permissions.Products.View)]みたいに使用する
 
 ★Serverプロジェクトについて
 ■Controllers
