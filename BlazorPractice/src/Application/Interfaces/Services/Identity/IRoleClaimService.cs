@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Application.Interfaces.Services.Identity
 {
+    /// <summary>
+    /// RoleClaimsテーブルに問い合わせる
+    /// </summary>
     public interface IRoleClaimService : IService
     {
         Task<Result<List<RoleClaimResponse>>> GetAllAsync();

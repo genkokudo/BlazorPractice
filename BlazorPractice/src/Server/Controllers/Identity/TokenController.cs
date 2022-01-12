@@ -30,13 +30,14 @@ namespace BlazorPractice.Server.Controllers.Identity
         }
 
         /// <summary>
-        /// Refresh Token
+        /// トークンの更新
         /// </summary>
         /// <param name="model"></param>
         /// <returns>Status 200 OK</returns>
         [HttpPost("refresh")]
         public async Task<ActionResult> Refresh([FromBody] RefreshTokenRequest model)
         {
+            // 現在のトークンから新しいトークンを取得する
             var response = await _identityService.GetRefreshTokenAsync(model);
             return Ok(response);
         }

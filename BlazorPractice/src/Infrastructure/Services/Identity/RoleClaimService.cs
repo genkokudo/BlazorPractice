@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Services.Identity
 {
+    /// <summary>
+    /// RoleClaimsテーブルに問い合わせる
+    /// </summary>
     public class RoleClaimService : IRoleClaimService
     {
         private readonly IStringLocalizer<RoleClaimService> _localizer;
@@ -33,6 +36,10 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             _db = db;
         }
 
+        /// <summary>
+        /// RoleClaim全レコード
+        /// </summary>
+        /// <returns></returns>
         public async Task<Result<List<RoleClaimResponse>>> GetAllAsync()
         {
             var roleClaims = await _db.RoleClaims.ToListAsync();
@@ -40,12 +47,21 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             return await Result<List<RoleClaimResponse>>.SuccessAsync(roleClaimsResponse);
         }
 
+        /// <summary>
+        /// RoleClaim件数
+        /// </summary>
+        /// <returns></returns>
         public async Task<int> GetCountAsync()
         {
             var count = await _db.RoleClaims.CountAsync();
             return count;
         }
 
+        /// <summary>
+        /// IDによるRoleClaim取得
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Result<RoleClaimResponse>> GetByIdAsync(int id)
         {
             var roleClaim = await _db.RoleClaims
@@ -54,6 +70,11 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             return await Result<RoleClaimResponse>.SuccessAsync(roleClaimResponse);
         }
 
+        /// <summary>
+        /// roleIdによる全ロール取得
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
         public async Task<Result<List<RoleClaimResponse>>> GetAllByRoleIdAsync(string roleId)
         {
             var roleClaims = await _db.RoleClaims
@@ -64,6 +85,11 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             return await Result<List<RoleClaimResponse>>.SuccessAsync(roleClaimsResponse);
         }
 
+        /// <summary>
+        /// ロール更新
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<Result<string>> SaveAsync(RoleClaimRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.RoleId))
@@ -110,6 +136,11 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             }
         }
 
+        /// <summary>
+        /// ロール削除
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Result<string>> DeleteAsync(int id)
         {
             var existingRoleClaim = await _db.RoleClaims

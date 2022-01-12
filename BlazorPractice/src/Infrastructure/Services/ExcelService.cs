@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Services
 {
+    /// <summary>
+    /// Excel出力処理
+    /// </summary>
     public class ExcelService : IExcelService
     {
         private readonly IStringLocalizer<ExcelService> _localizer;

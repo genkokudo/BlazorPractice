@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Services
 {
+    /// <summary>
+    /// チャットに関する処理
+    /// </summary>
     public class ChatService : IChatService
     {
         private readonly BlazorHeroContext _context;

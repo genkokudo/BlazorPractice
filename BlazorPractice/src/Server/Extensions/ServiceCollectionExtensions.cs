@@ -245,17 +245,22 @@ namespace BlazorPractice.Server.Extensions
             return services;
         }
 
+        /// <summary>
+        /// その他独自のサービスの登録
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns></returns>
         internal static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddTransient<IRoleClaimService, RoleClaimService>();
-            services.AddTransient<ITokenService, IdentityService>();
-            services.AddTransient<IRoleService, RoleService>();
-            services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IChatService, ChatService>();
-            services.AddTransient<IUploadService, UploadService>();
-            services.AddTransient<IAuditService, AuditService>();
-            services.AddScoped<IExcelService, ExcelService>();
+            services.AddTransient<IRoleClaimService, RoleClaimService>();   // RoleClaimテーブルに問い合わせる
+            services.AddTransient<ITokenService, IdentityService>();        // ユーザ認証関係の処理
+            services.AddTransient<IRoleService, RoleService>();             // ロール情報を問い合わせる
+            services.AddTransient<IAccountService, AccountService>();       // アカウントの操作関係の処理
+            services.AddTransient<IUserService, UserService>();             // ユーザ情報に関する処理
+            services.AddTransient<IChatService, ChatService>();             // チャットに関する処理
+            services.AddTransient<IUploadService, UploadService>();         // ファイルのアップロード処理
+            services.AddTransient<IAuditService, AuditService>();           // 監査（更新テーブル、項目、値の履歴）データを取得、出力する
+            services.AddScoped<IExcelService, ExcelService>();              // Excel出力処理
             return services;
         }
 

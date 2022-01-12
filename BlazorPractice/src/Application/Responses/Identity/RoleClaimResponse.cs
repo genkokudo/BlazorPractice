@@ -1,5 +1,8 @@
 ﻿namespace BlazorPractice.Application.Responses.Identity
 {
+    /// <summary>
+    /// RoleClaim一覧表示用のデータ構造
+    /// </summary>
     public class RoleClaimResponse
     {
         public int Id { get; set; }

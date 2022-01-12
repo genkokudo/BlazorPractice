@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Application.Extensions
 {
+    /// <summary>
+    /// IQueryableを拡張する
+    /// </summary>
     public static class QueryableExtensions
     {
         public static async Task<PaginatedResult<T>> ToPaginatedListAsync<T>(this IQueryable<T> source, int pageNumber, int pageSize) where T : class
@@ -22,15 +25,24 @@ namespace BlazorPractice.Application.Extensions
             return PaginatedResult<T>.Success(items, count, pageNumber, pageSize);
         }
 
+        /// <summary>
+        /// 検索フィルタ仕様に従って絞り込む
+        /// Where句をオブジェクトに保持しておいてSpecifyで適用する。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="query"></param>
+        /// <param name="spec">絞り込み方法の情報</param>
+        /// <returns></returns>
         public static IQueryable<T> Specify<T>(this IQueryable<T> query, ISpecification<T> spec) where T : class, IEntity
         {
+            // Aggregateは第2引数に従って集計する。currentは現在の結果、includeは配列の次の値
             var queryableResultWithIncludes = spec.Includes
                 .Aggregate(query,
-                    (current, include) => current.Include(include));
-            var secondaryResult = spec.IncludeStrings
+                    (current, include) => current.Include(include));    // 多分EFCoreのInclude処理。
+            var secondaryResult = spec.IncludeStrings                   // 上の結果に対して更にInclude処理。文字列でInclude指定しているけどそんなことできるの？
                 .Aggregate(queryableResultWithIncludes,
                     (current, include) => current.Include(include));
-            return secondaryResult.Where(spec.Criteria);
+            return secondaryResult.Where(spec.Criteria);                // 仕様に従って絞り込む
         }
     }
 }

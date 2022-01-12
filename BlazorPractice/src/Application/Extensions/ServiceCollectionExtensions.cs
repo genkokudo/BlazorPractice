@@ -14,8 +14,16 @@ using System.Reflection;
 
 namespace BlazorPractice.Application.Extensions
 {
+    /// <summary>
+    /// アセンブリ内から監査項目を実装したEntityを探してそのRequestHandlerクラスをサービス登録
+    /// なぜこれをやるのか分からない
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
+        /// <summary>
+        /// AutoMapperとMediatRを使用する
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddApplicationLayer(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -24,8 +32,14 @@ namespace BlazorPractice.Application.Extensions
             //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         }
 
+        /// <summary>
+        /// アセンブリ内から監査項目を実装したEntityを探して
+        /// そのRequestHandlerクラスをサービス登録
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddExtendedAttributesHandlers(this IServiceCollection services)
         {
+            // アセンブリ内から監査項目を実装したEntityを探す
             var extendedAttributeTypes = typeof(IEntity)
                 .Assembly
                 .GetExportedTypes()
@@ -38,11 +52,15 @@ namespace BlazorPractice.Application.Extensions
                 .Where(t => t.BaseGenericType?.GetGenericTypeDefinition() == typeof(AuditableEntityExtendedAttribute<,,>))
                 .ToList();
 
+            // それぞれのEntityに対して、HandlerクラスをDIできるように、Command(またはQuery)とResultのIRequestHandlerとしてサービス登録
+            // これで、IRequestHandler<TRequest,TResponse>によって対応するCRUDのHandlerクラスがDIできるようになる？
+            // でもそんなことしてどうするの？MediatRはこれをしなくても使えるはず。
             foreach (var extendedAttributeType in extendedAttributeTypes)
             {
-                var extendedAttributeTypeGenericArguments = extendedAttributeType.BaseGenericType.GetGenericArguments().ToList();
+                var extendedAttributeTypeGenericArguments = extendedAttributeType.BaseGenericType.GetGenericArguments().ToList();       // 1個のはず・・・？
                 extendedAttributeTypeGenericArguments.Add(extendedAttributeType.CurrentType);
 
+                // 更新削除
                 #region AddEditExtendedAttributeCommandHandler
 
                 var tRequest = typeof(AddEditExtendedAttributeCommand<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());
@@ -63,6 +81,7 @@ namespace BlazorPractice.Application.Extensions
 
                 #endregion DeleteExtendedAttributeCommandHandler
 
+                // 検索
                 #region GetAllExtendedAttributesByEntityIdQueryHandler
 
                 tRequest = typeof(GetAllExtendedAttributesByEntityIdQuery<,,,>).MakeGenericType(extendedAttributeTypeGenericArguments.ToArray());

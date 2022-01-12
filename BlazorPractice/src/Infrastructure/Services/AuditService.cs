@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Services
 {
+    /// <summary>
+    /// 監査（更新テーブル、項目、値の履歴）
+    /// </summary>
     public class AuditService : IAuditService
     {
         private readonly BlazorHeroContext _context;
@@ -35,6 +38,11 @@ namespace BlazorPractice.Infrastructure.Services
             _localizer = localizer;
         }
 
+        /// <summary>
+        /// 現在のユーザの監査基準（更新テーブル、項目、値の履歴）を取得する
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IResult<IEnumerable<AuditResponse>>> GetCurrentUserTrailsAsync(string userId)
         {
             var trails = await _context.AuditTrails.Where(a => a.UserId == userId).OrderByDescending(a => a.Id).Take(250).ToListAsync();
@@ -42,11 +50,21 @@ namespace BlazorPractice.Infrastructure.Services
             return await Result<IEnumerable<AuditResponse>>.SuccessAsync(mappedLogs);
         }
 
+        /// <summary>
+        /// Excel出力
+        /// searchString,searchInOldValues,searchInNewValuesはOR条件
+        /// </summary>
+        /// <param name="userId">ユーザID</param>
+        /// <param name="searchString"></param>
+        /// <param name="searchInOldValues"></param>
+        /// <param name="searchInNewValues"></param>
+        /// <returns></returns>
         public async Task<IResult<string>> ExportToExcelAsync(string userId, string searchString = "", bool searchInOldValues = false, bool searchInNewValues = false)
         {
+            // 検索条件が無ければ全検索というフィルタ仕様を作成
             var auditSpec = new AuditFilterSpecification(userId, searchString, searchInOldValues, searchInNewValues);
             var trails = await _context.AuditTrails
-                .Specify(auditSpec)
+                .Specify(auditSpec)     // フィルタ仕様に従って検索（決まったWhere句を適用）する
                 .OrderByDescending(a => a.DateTime)
                 .ToListAsync();
             var data = await _excelService.ExportAsync(trails, sheetName: _localizer["Audit trails"],

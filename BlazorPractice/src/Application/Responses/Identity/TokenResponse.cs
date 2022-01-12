@@ -2,6 +2,9 @@
 
 namespace BlazorPractice.Application.Responses.Identity
 {
+    /// <summary>
+    /// 新しくトークンを発行した時のレスポンス
+    /// </summary>
     public class TokenResponse
     {
         public string Token { get; set; }

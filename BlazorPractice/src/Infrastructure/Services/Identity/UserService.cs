@@ -25,6 +25,10 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Services.Identity
 {
+    /// <summary>
+    /// ユーザ情報に関する処理
+    /// パスワードの再発行とかもここ
+    /// </summary>
     public class UserService : IUserService
     {
         private readonly UserManager<BlazorHeroUser> _userManager;

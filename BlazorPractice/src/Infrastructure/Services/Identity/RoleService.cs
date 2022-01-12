@@ -18,6 +18,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Services.Identity
 {
+    /// <summary>
+    /// ロール情報を問い合わせる
+    /// </summary>
     public class RoleService : IRoleService
     {
         private readonly RoleManager<BlazorHeroRole> _roleManager;
@@ -43,11 +46,18 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// IDに対するロールを削除
+        /// </summary>
+        /// <param name="id">多分、RoleテーブルのID</param>
+        /// <returns></returns>
         public async Task<Result<string>> DeleteAsync(string id)
         {
             var existingRole = await _roleManager.FindByIdAsync(id);
+            // システム上消せる権限か確認
             if (existingRole.Name != RoleConstants.AdministratorRole && existingRole.Name != RoleConstants.BasicRole)
             {
+                // 権限が使われているか確認
                 bool roleIsNotUsed = true;
                 var allUsers = await _userManager.Users.ToListAsync();
                 foreach (var user in allUsers)
@@ -59,6 +69,7 @@ namespace BlazorPractice.Infrastructure.Services.Identity
                 }
                 if (roleIsNotUsed)
                 {
+                    // 使われていなければ削除
                     await _roleManager.DeleteAsync(existingRole);
                     return await Result<string>.SuccessAsync(string.Format(_localizer["Role {0} Deleted."], existingRole.Name));
                 }
@@ -80,6 +91,11 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             return await Result<List<RoleResponse>>.SuccessAsync(rolesResponse);
         }
 
+        /// <summary>
+        /// roleIdに紐づいている全ての権限を取得
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
         public async Task<Result<PermissionResponse>> GetAllPermissionsAsync(string roleId)
         {
             var model = new PermissionResponse();
@@ -136,6 +152,11 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             return allPermissions;
         }
 
+        /// <summary>
+        /// IDによるロール取得
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<Result<RoleResponse>> GetByIdAsync(string id)
         {
             var roles = await _roleManager.Roles.SingleOrDefaultAsync(x => x.Id == id);
@@ -143,6 +164,11 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             return await Result<RoleResponse>.SuccessAsync(rolesResponse);
         }
 
+        /// <summary>
+        /// ロール変更を保存
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<Result<string>> SaveAsync(RoleRequest request)
         {
             if (string.IsNullOrEmpty(request.Id))
@@ -174,6 +200,11 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             }
         }
 
+        /// <summary>
+        /// ロールに対する権限を変更
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<Result<string>> UpdatePermissionsAsync(PermissionRequest request)
         {
             try
@@ -252,6 +283,10 @@ namespace BlazorPractice.Infrastructure.Services.Identity
             }
         }
 
+        /// <summary>
+        /// ロール件数を取得
+        /// </summary>
+        /// <returns></returns>
         public async Task<int> GetCountAsync()
         {
             var count = await _roleManager.Roles.CountAsync();

@@ -50,18 +50,18 @@ namespace BlazorPractice.Server
             services.AddServerLocalization();               // ローカライズサービスを登録する
             services.AddIdentity();                         // ポリシー判定サービスやパスワードポリシーの設定、カスタムしたユーザと権限情報
             services.AddJwtAuthentication(services.GetApplicationSettings(_configuration)); // ポリシーの種類と判定方法（特定の年齢以下は禁止みたいなの）を登録
-            services.AddApplicationLayer();
-            services.AddApplicationServices();
+            services.AddApplicationLayer();                 // AutoMapperとMediatRを使用する
+            services.AddApplicationServices();              // その他独自のサービスの登録
             services.AddRepositories();
             services.AddExtendedAttributesUnitOfWork();     // UnitOfWorkという実装パターンで、DBの一貫性を保つ
             services.AddSharedInfrastructure(_configuration);
-            services.RegisterSwagger();                     // Swaggerを利用する
+            services.RegisterSwagger();                     // Swaggerを使用する
             services.AddInfrastructureMappings();
             services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
             services.AddHangfireServer();
             services.AddControllers().AddValidators();
             services.AddExtendedAttributesValidators();
-            services.AddExtendedAttributesHandlers();
+            services.AddExtendedAttributesHandlers();       // アセンブリ内から監査項目を実装したEntityを探してそのRequestHandlerクラスをサービス登録
             services.AddRazorPages();
             services.AddApiVersioning(config =>
             {
