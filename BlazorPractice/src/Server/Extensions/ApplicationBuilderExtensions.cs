@@ -15,6 +15,12 @@ namespace BlazorPractice.Server.Extensions
 {
     internal static class ApplicationBuilderExtensions
     {
+        /// <summary>
+        /// 開発環境の場合、例外が発生したらエラーページを表示する
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
+        /// <returns></returns>
         internal static IApplicationBuilder UseExceptionHandling(
             this IApplicationBuilder app,
             IWebHostEnvironment env)
@@ -28,6 +34,10 @@ namespace BlazorPractice.Server.Extensions
             return app;
         }
 
+        /// <summary>
+        /// Swaggerの設定
+        /// </summary>
+        /// <param name="app"></param>
         internal static void ConfigureSwagger(this IApplicationBuilder app)
         {
             app.UseSwagger();
@@ -48,6 +58,11 @@ namespace BlazorPractice.Server.Extensions
                 endpoints.MapHub<SignalRHub>(ApplicationConstants.SignalR.HubUrl);
             });
 
+        /// <summary>
+        /// カルチャ関係だけどよく分からない
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
         internal static IApplicationBuilder UseRequestLocalizationByCulture(this IApplicationBuilder app)
         {
             var supportedCultures = LocalizationConstants.SupportedLanguages.Select(l => new CultureInfo(l.Code)).ToArray();
@@ -59,11 +74,18 @@ namespace BlazorPractice.Server.Extensions
                 options.ApplyCurrentCultureToResponseHeaders = true;
             });
 
+            // リクエストに特定のカルチャ情報がある場合、CultureInfoの設定値を変更する
             app.UseMiddleware<RequestCultureMiddleware>();
 
             return app;
         }
 
+        /// <summary>
+        /// IDatabaseSeederで初期化する
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="_configuration"></param>
+        /// <returns></returns>
         internal static IApplicationBuilder Initialize(this IApplicationBuilder app, Microsoft.Extensions.Configuration.IConfiguration _configuration)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();

@@ -8,14 +8,23 @@ using System.Linq;
 
 namespace BlazorPractice.Server.Extensions
 {
+    /// <summary>
+    /// Startupで使用
+    /// FluentValidationの実装クラスをすべて登録する
+    /// </summary>
     internal static class MvcBuilderExtensions
     {
         internal static IMvcBuilder AddValidators(this IMvcBuilder builder)
         {
-            builder.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppConfiguration>());
+            // FluentValidationの自動登録機能：特定のアセンブリ内のすべてのバリデーターを自動的に登録する
+            builder.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<AppConfiguration>()); // 型引数これで正しいの？BlazorPractice.Applicationを指定してるってこと？
             return builder;
         }
 
+        /// <summary>
+        /// AddEditExtendedAttributeCommandValidatorを実装しているバリデータをまとめて登録する
+        /// </summary>
+        /// <param name="services"></param>
         internal static void AddExtendedAttributesValidators(this IServiceCollection services)
         {
             #region AddEditExtendedAttributeCommandValidator

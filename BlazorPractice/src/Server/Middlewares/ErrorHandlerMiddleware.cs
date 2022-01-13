@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Server.Middlewares
 {
+    /// <summary>
+    /// エラーが発生したらここでハンドリングできるようにする
+    /// エラー発生時にレスポンスに入れるステータスコードを設定する
+    /// </summary>
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;

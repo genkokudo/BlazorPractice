@@ -52,15 +52,15 @@ namespace BlazorPractice.Server
             services.AddJwtAuthentication(services.GetApplicationSettings(_configuration)); // ポリシーの種類と判定方法（特定の年齢以下は禁止みたいなの）を登録
             services.AddApplicationLayer();                 // AutoMapperとMediatRを使用する
             services.AddApplicationServices();              // その他独自のサービスの登録
-            services.AddRepositories();
+            services.AddRepositories();                     // 各EntityのRepositoryクラスをサービス登録して、各テーブルの操作を行うクラスをDIできるようにする。
             services.AddExtendedAttributesUnitOfWork();     // UnitOfWorkという実装パターンで、DBの一貫性を保つ
-            services.AddSharedInfrastructure(_configuration);
+            services.AddSharedInfrastructure(_configuration);   // その他のサービスを登録（時間、メール）
             services.RegisterSwagger();                     // Swaggerを使用する
-            services.AddInfrastructureMappings();
-            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));
-            services.AddHangfireServer();
-            services.AddControllers().AddValidators();
-            services.AddExtendedAttributesValidators();
+            services.AddInfrastructureMappings();           // AutoMapperの設定（マッピングが他のアセンブリにあるため）
+            services.AddHangfire(x => x.UseSqlServerStorage(_configuration.GetConnectionString("DefaultConnection")));  // Hangfire
+            services.AddHangfireServer();                   // 自動化されたタスクまたはcronジョブを管理するための便利なツール、毎日または毎週特定の時間に実行する必要があるサービスメソッドがある場合
+            services.AddControllers().AddValidators();      // FluentValidation
+            services.AddExtendedAttributesValidators();     // FluentValidationのバリデータをアセンブリから探してすべて登録する
             services.AddExtendedAttributesHandlers();       // アセンブリ内から監査項目を実装したEntityを探してそのRequestHandlerクラスをサービス登録
             services.AddRazorPages();
             services.AddApiVersioning(config =>
@@ -74,29 +74,30 @@ namespace BlazorPractice.Server
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IStringLocalizer<Startup> localizer)
         {
-            app.UseCors();
-            app.UseExceptionHandling(env);
-            app.UseHttpsRedirection();
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-            app.UseBlazorFrameworkFiles();
-            app.UseStaticFiles();
+            // UseCors,UseAuthentication,UseAuthorizationは必ずこの順序で呼ばなければならない
+            app.UseCors();                                  // CORS：あるオリジンで動いている Web アプリケーションに対して、別のオリジンのサーバーへのアクセスをオリジン間 HTTP リクエストによって許可できる仕組み
+            app.UseExceptionHandling(env);                  // 開発環境の場合、例外が発生したらエラーページを表示する
+            app.UseHttpsRedirection();                      // HTTP 要求を HTTPS にリダイレクトする
+            app.UseMiddleware<ErrorHandlerMiddleware>();    // エラー発生時にレスポンスに入れるステータスコードを設定する
+            app.UseBlazorFrameworkFiles();                  // Blazor WebAssembly フレームワークのファイルをルートパス "/" から提供するように、アプリケーションを設定します。
+            app.UseStaticFiles();                           // Server/Files以下を静的ファイルとする
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
                 RequestPath = new PathString("/Files")
             });
-            app.UseRequestLocalizationByCulture();
-            app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseHangfireDashboard("/jobs", new DashboardOptions
+            app.UseRequestLocalizationByCulture();          // カルチャ関係だけどよく分からない
+            app.UseRouting();                               // ルーティング
+            app.UseAuthentication();                        // ユーザーがセキュリティで保護されたリソースにアクセスする前に、ユーザーの認証が試行されます。
+            app.UseAuthorization();                         // ユーザーがセキュリティで保護されたリソースにアクセスすることが承認されます。
+            app.UseHangfireDashboard("/jobs", new DashboardOptions              // Hangfire（定時実行処理）のダッシュボード
             {
                 DashboardTitle = localizer["BlazorHero Jobs"],
                 Authorization = new[] { new HangfireAuthorizationFilter() }
             });
             app.UseEndpoints();
-            app.ConfigureSwagger();
-            app.Initialize(_configuration);
+            app.ConfigureSwagger();                         // Swaggerの設定
+            app.Initialize(_configuration);                 // IDatabaseSeederで初期化（DB初期データがまだない場合にデータを入れる）
         }
     }
 }

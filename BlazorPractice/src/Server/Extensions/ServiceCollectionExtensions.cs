@@ -237,11 +237,17 @@ namespace BlazorPractice.Server.Extensions
             return services;
         }
 
+        /// <summary>
+        /// その他のサービスを登録
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
         internal static IServiceCollection AddSharedInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IDateTimeService, SystemDateTimeService>();
+            services.AddTransient<IDateTimeService, SystemDateTimeService>();   // 使用する時間を統一する
             services.Configure<MailConfiguration>(configuration.GetSection("MailConfiguration"));
-            services.AddTransient<IMailService, SMTPMailService>();
+            services.AddTransient<IMailService, SMTPMailService>();     // SMTPでメールを送信する
             return services;
         }
 

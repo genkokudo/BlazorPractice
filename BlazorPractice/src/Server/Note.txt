@@ -17,6 +17,27 @@ Startupで行われている設定で、以下の事を行っている
 ・AddJwtAuthentication：ポリシーの種類と判定ロジックの登録
 ここで設定しているポリシーは、[Authorize(Policy = Permissions.Products.View)]みたいに使用する
 
+★検索の絞り込みについて
+あらかじめWhere句にあたる部分をクラス化して、IQueryableを拡張することで
+グローバルクエリフィルタみたいなことをやってる。
+
+★Hangfireについて
+Hangfireは、自動化されたタスクまたはcronジョブを管理するための便利なツールです。
+毎日または毎週特定の時間に実行する必要があるサービスメソッドがある場合、hangfireはそれを支援します。
+
+★FluentValidationについて
+有効にすると、MVCはコントローラーアクションに渡されるオブジェクトを検証します。
+こういう感じで。
+public ActionResult Save([CustomizeValidator(RuleSet="MyRuleset")] Customer cust) {}
+
+登録はStartupでまとめて行う。
+本体はここ：BlazorPractice.Application.Validators.Features.ExtendedAttributes.Commands.AddEdit
+
+★リポジトリパターン
+データアクセスするロジックをcontrollerから切り離して集約する考え方。CRUD操作に関してビジネスロジックを考慮する必要がなくなる。
+コントローラにリポジトリをインジェクションする。
+Entity毎にリポジトリを作っても良いし、全てのエンティティに対して1つのリポジトリを作る考え方もある。
+
 ★Serverプロジェクトについて
 ■Controllers
 APIコントローラを入れるところ。
@@ -24,6 +45,8 @@ APIコントローラを入れるところ。
 ExtendedAttributesControllerという汎用的なコントローラを作成して、
 各Entityに共通の機能を持たせている。CRUDもこれでできる。
 継承したクラスをMiscフォルダに入れる。
+
+
 
 
 

@@ -11,7 +11,13 @@ namespace BlazorPractice.Application.Validators.Features.ExtendedAttributes.Comm
     {
         // for localization
     }
-
+    /// <summary>
+    /// FluentValidationで使用するバリデータ
+    /// </summary>
+    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="TEntityId"></typeparam>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TExtendedAttribute"></typeparam>
     public abstract class AddEditExtendedAttributeCommandValidator<TId, TEntityId, TEntity, TExtendedAttribute> : AbstractValidator<AddEditExtendedAttributeCommand<TId, TEntityId, TEntity, TExtendedAttribute>>
         where TEntity : AuditableEntity<TEntityId>, IEntityWithExtendedAttributes<TExtendedAttribute>, IEntity<TEntityId>
         where TExtendedAttribute : AuditableEntityExtendedAttribute<TId, TEntityId, TEntity>, IEntity<TId>

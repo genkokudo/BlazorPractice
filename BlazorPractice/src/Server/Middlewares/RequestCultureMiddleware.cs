@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Server.Middlewares
 {
+    /// <summary>
+    /// リクエストに特定のカルチャ情報がある場合、CultureInfoの設定値を変更する
+    /// CultureInfoが何か分からないけど。
+    /// </summary>
     public class RequestCultureMiddleware
     {
         private readonly RequestDelegate _next;

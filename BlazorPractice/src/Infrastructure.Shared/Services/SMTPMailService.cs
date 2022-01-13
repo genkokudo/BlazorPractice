@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure.Shared.Services
 {
+    /// <summary>
+    /// SMTPでメールを送信する
+    /// </summary>
     public class SMTPMailService : IMailService
     {
         private readonly MailConfiguration _config;

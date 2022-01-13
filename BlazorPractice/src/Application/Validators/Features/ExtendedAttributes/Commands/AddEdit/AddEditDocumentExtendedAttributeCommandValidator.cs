@@ -4,6 +4,9 @@ using Microsoft.Extensions.Localization;
 
 namespace BlazorPractice.Application.Validators.Features.ExtendedAttributes.Commands.AddEdit
 {
+    /// <summary>
+    /// FluentValidationによるバリデータ
+    /// </summary>
     public class AddEditDocumentExtendedAttributeCommandValidator : AddEditExtendedAttributeCommandValidator<int, int, Document, DocumentExtendedAttribute>
     {
         public AddEditDocumentExtendedAttributeCommandValidator(IStringLocalizer<AddEditExtendedAttributeCommandValidatorLocalization> localizer) : base(localizer)

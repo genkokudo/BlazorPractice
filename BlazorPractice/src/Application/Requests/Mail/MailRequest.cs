@@ -1,5 +1,8 @@
 ﻿namespace BlazorPractice.Application.Requests.Mail
 {
+    /// <summary>
+    /// メール送信データ
+    /// </summary>
     public class MailRequest
     {
         public string To { get; set; }
