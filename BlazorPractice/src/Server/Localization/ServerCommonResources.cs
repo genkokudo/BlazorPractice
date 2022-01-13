@@ -2,6 +2,6 @@
 {
     internal class ServerCommonResources
     {
-        // Used to localize strings in static classes
+        // 静的クラス内の文字列をローカライズするために使用します。
     }
 }

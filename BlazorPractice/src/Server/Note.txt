@@ -46,8 +46,37 @@ ExtendedAttributesControllerという汎用的なコントローラを作成し�
 各Entityに共通の機能を持たせている。CRUDもこれでできる。
 継承したクラスをMiscフォルダに入れる。
 
+■Extensions
+主に、Startupの時にいつもやってる設定を整理して、Builderの拡張としている。
 
+■Files
+初期化時に、静的ファイルとしてアクセスできるように設定している。
 
+■Hubs
+SignalRで使用する
+
+■Localization
+ローカライズ関係
+
+■Managers
+管理クラスを入れる所だけど、
+今のところ、サーバ側のユーザ設定管理のみ
+
+■Middlewares
+Middlewareを入れる所。
+
+■Permission
+API呼び出し時などの権限チェック方法についてカスタムしている。
+
+■Resources
+多言語対応ファイルを入れる所。
+それ以外のリソースはここには入れない。
+
+■Services
+Serviceは別プロジェクトに入れるので、ここは殆ど使わないはず。
+
+■Settings
+サーバの設定項目があればここに追加する。
 
 
 

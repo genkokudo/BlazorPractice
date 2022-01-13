@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace BlazorPractice.Server.Services
 {
     /// <summary>
-    /// 現在のユーザのClainやIDを取得するアクセサ
+    /// 現在のユーザのClaimやIDを取得するアクセサ
     /// </summary>
     public class CurrentUserService : ICurrentUserService
     {
