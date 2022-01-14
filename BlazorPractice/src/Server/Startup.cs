@@ -76,7 +76,7 @@ namespace BlazorPractice.Server
         {
             // UseCors,UseAuthentication,UseAuthorizationは必ずこの順序で呼ばなければならない
             app.UseCors();                                  // CORS：あるオリジンで動いている Web アプリケーションに対して、別のオリジンのサーバーへのアクセスをオリジン間 HTTP リクエストによって許可できる仕組み
-            app.UseExceptionHandling(env);                  // 開発環境の場合、例外が発生したらエラーページを表示する
+            app.UseExceptionHandling(env);                  // 開発環境の場合、例外が発生したらエラーページを表示する（NET6から追加されたErrorBoundary コンポーネントを使った方が良いのでは？）
             app.UseHttpsRedirection();                      // HTTP 要求を HTTPS にリダイレクトする
             app.UseMiddleware<ErrorHandlerMiddleware>();    // エラー発生時にレスポンスに入れるステータスコードを設定する
             app.UseBlazorFrameworkFiles();                  // Blazor WebAssembly フレームワークのファイルをルートパス "/" から提供するように、アプリケーションを設定します。
