@@ -72,7 +72,8 @@ namespace BlazorPractice.Client.Extensions
                 .AddTransient<AuthenticationHeaderHandler>()                // ローカルストレージに認証トークンがあれば、Bearer認証にする
                 .AddScoped(sp => sp
                     .GetRequiredService<IHttpClientFactory>()
-                    .CreateClient(ClientName).EnableIntercept(sp))
+                    .CreateClient(ClientName)
+                    .EnableIntercept(sp))                                   // @inject IHttpClientInterceptor Interceptorで、すべてのHTTPリクエストを送信する前後に発生するイベントを登録できるライブラリ https://www.nuget.org/packages/Toolbelt.Blazor.HttpClientInterceptor/
                 .AddHttpClient(ClientName, client =>
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
