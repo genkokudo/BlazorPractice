@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Infrastructure
 {
+    /// <summary>
+    /// DBに初期データを入れる
+    /// </summary>
     public class DatabaseSeeder : IDatabaseSeeder
     {
         private readonly ILogger<DatabaseSeeder> _logger;
@@ -44,6 +47,9 @@ namespace BlazorPractice.Infrastructure
             _db.SaveChanges();
         }
 
+        /// <summary>
+        /// 管理者を登録
+        /// </summary>
         private void AddAdministrator()
         {
             Task.Run(async () =>
@@ -93,6 +99,9 @@ namespace BlazorPractice.Infrastructure
             }).GetAwaiter().GetResult();
         }
 
+        /// <summary>
+        /// 一般ユーザを登録
+        /// </summary>
         private void AddBasicUser()
         {
             Task.Run(async () =>

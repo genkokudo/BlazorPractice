@@ -38,21 +38,22 @@
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Identity.AccountController.ChangePassword(BlazorPractice.Application.Requests.Identity.ChangePasswordRequest)">
             <summary>
-            Change Password
+            パスワード変更
             </summary>
             <param name="model"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Identity.AccountController.GetProfilePictureAsync(System.String)">
             <summary>
-            Get Profile picture by Id
+            IDからプロフィール写真のURLを取得
+            失敗したらメッセージが入る
             </summary>
-            <param name="userId"></param>
+            <param name="userId">ユーザID</param>
             <returns>Status 200 OK </returns>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Identity.AccountController.UpdateProfilePictureAsync(BlazorPractice.Application.Requests.Identity.UpdateProfilePictureRequest)">
             <summary>
-            Update Profile Picture
+            プロフィール写真のアップロード
             </summary>
             <param name="request"></param>
             <returns>Status 200 OK</returns>
@@ -66,7 +67,7 @@
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Identity.TokenController.Refresh(BlazorPractice.Application.Requests.Identity.RefreshTokenRequest)">
             <summary>
-            Refresh Token
+            トークンの更新
             </summary>
             <param name="model"></param>
             <returns>Status 200 OK</returns>
@@ -219,53 +220,67 @@
         </member>
         <member name="T:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4">
             <summary>
-            Abstract Extended Attributes Controller Class
+            抽象拡張属性コントローラクラス
+            
+            CRUDはこれでまとめている。継承して型引数にEntityを入れるだけでAPIができる
+            TEntityはEntityクラスの型、TExtendedAttributeはTEntityを型引数に作成したAuditableEntityExtendedAttributeクラス
+            
+            APIなので、クライアント用のデータにAutoMapperで変換したものが返される
+            
+            TIdはAuditableEntityのID、TEntityIdはIEntityのIDなので、何故両方持たせる必要があるのか謎。
             </summary>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.GetAll">
             <summary>
-            Get All Entity Extended Attributes
+            全検索
             </summary>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.GetAllByEntityId(`1)">
             <summary>
-            Get All Entity Extended Attributes by entity id
+            エンティティIDによる全エントリ拡張属性の取得
             </summary>
             <param name="entityId"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.GetById(`0)">
             <summary>
-            Get Entity Extended Attribute By Id
+            IDによる検索
+            AutoMapperによってクライアント用のデータ形式（？）に変換して取得している
             </summary>
             <param name="id"></param>
             <returns>Status 200 Ok</returns>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Post(BlazorPractice.Application.Features.ExtendedAttributes.Commands.AddEdit.AddEditExtendedAttributeCommand{`0,`1,`2,`3})">
             <summary>
-            Create/Update a Entity Extended Attribute
+            新規登録と更新
             </summary>
             <param name="command"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Delete(`0)">
             <summary>
-            Delete a Entity Extended Attribute
+            削除
             </summary>
             <param name="id"></param>
             <returns>Status 200 OK</returns>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Base.ExtendedAttributesController`4.Export(System.String,`1,System.Boolean,System.Boolean,System.String)">
             <summary>
-            Search Entity Extended Attribute and Export to Excel
+            エンティティ拡張属性の検索とExcelへのエクスポート
             </summary>
             <param name="searchString"></param>
             <param name="entityId"></param>
             <param name="includeEntity"></param>
             <param name="onlyCurrentGroup"></param>
             <param name="currentGroup"></param>
-            <returns></returns>
+            <returns>DataにExcelファイルデータのByte配列を入れる</returns>
+        </member>
+        <member name="T:BlazorPractice.Server.Controllers.Utilities.ExtendedAttributes.Misc.DocumentExtendedAttributesController">
+            <summary>
+            Document用の拡張コントローラ
+            ルーティングはBaseクラスで行なっているので、ここでは権限設定だけ
+            </summary>
         </member>
         <member name="M:BlazorPractice.Server.Controllers.Utilities.Misc.DocumentsController.GetAll(System.Int32,System.Int32,System.String)">
             <summary>
@@ -415,6 +430,199 @@
             Get Dashboard Data
             </summary>
             <returns>Status 200 OK </returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ApplicationBuilderExtensions.UseExceptionHandling(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            開発環境の場合、例外が発生したらエラーページを表示する
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ApplicationBuilderExtensions.ConfigureSwagger(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Swaggerの設定
+            </summary>
+            <param name="app"></param>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ApplicationBuilderExtensions.UseRequestLocalizationByCulture(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            カルチャ関係だけどよく分からない
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ApplicationBuilderExtensions.Initialize(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            IDatabaseSeederで初期化する
+            </summary>
+            <param name="app"></param>
+            <param name="_configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.HostBuilderExtensions.UseSerilog(Microsoft.Extensions.Hosting.IHostBuilder)">
+            <summary>
+            ログ設定
+            Program.csで呼ぶ
+            </summary>
+            <param name="builder"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BlazorPractice.Server.Extensions.MvcBuilderExtensions">
+            <summary>
+            Startupで使用
+            FluentValidationの実装クラスをすべて登録する
+            </summary>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.MvcBuilderExtensions.AddExtendedAttributesValidators(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            AddEditExtendedAttributeCommandValidatorを実装しているバリデータをまとめて登録する
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.RegisterSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Swaggerを有効にする
+            （APIドキュメントの自動生成）
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.AddSerialization(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Jsonシリアライザをサービス登録する
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.AddDatabase(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            データベースをサービス登録する
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.AddCurrentUserService(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            現在のユーザのClainやIDを取得するアクセサを登録する
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.AddIdentity(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ポリシー判定サービスやパスワードポリシーの設定
+            カスタムしたユーザと権限情報の使用設定
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.AddSharedInfrastructure(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            その他のサービスを登録
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.AddApplicationServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            その他独自のサービスの登録
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BlazorPractice.Server.Extensions.ServiceCollectionExtensions.AddJwtAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,BlazorPractice.Application.Configurations.AppConfiguration)">
+            <summary>
+            Bearer認証を設定する
+            Permissionsクラスに設定している権限を全てポリシーに設定する
+            </summary>
+            <param name="services"></param>
+            <param name="config"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BlazorPractice.Server.Filters.HangfireAuthorizationFilter">
+            <summary>
+            UseHangfireDashboardで使用
+            </summary>
+        </member>
+        <member name="T:BlazorPractice.Server.Localization.ServerLocalizer`1">
+            <summary>
+            ローカライズサービス
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:BlazorPractice.Server.Managers.Preferences.IServerPreferenceManager">
+            <summary>
+            サーバ側設定のインタフェース
+            </summary>
+        </member>
+        <member name="T:BlazorPractice.Server.Managers.Preferences.ServerPreferenceManager">
+            <summary>
+            サーバ側の設定管理
+            ローカライズの管理
+            </summary>
+        </member>
+        <member name="T:BlazorPractice.Server.Middlewares.ErrorHandlerMiddleware">
+            <summary>
+            エラーが発生したらここでハンドリングできるようにする
+            エラー発生時にレスポンスに入れるステータスコードを設定する
+            </summary>
+        </member>
+        <member name="T:BlazorPractice.Server.Middlewares.RequestCultureMiddleware">
+            <summary>
+            リクエストに特定のカルチャ情報がある場合、CultureInfoの設定値を変更する
+            CultureInfoが何か分からないけど。
+            </summary>
+        </member>
+        <member name="T:BlazorPractice.Server.Permission.PermissionAuthorizationHandler">
+            <summary>
+            ユーザのClaimから必要な権限があるかを探して、許可の判定をする
+            </summary>
+        </member>
+        <member name="M:BlazorPractice.Server.Permission.PermissionAuthorizationHandler.HandleRequirementAsync(Microsoft.AspNetCore.Authorization.AuthorizationHandlerContext,BlazorPractice.Server.Permission.PermissionRequirement)">
+            <summary>
+            Baseの処理は呼ばない
+            </summary>
+            <param name="context">認証におけるコンテキスト</param>
+            <param name="requirement">必要な権限</param>
+            <returns></returns>
+        </member>
+        <member name="T:BlazorPractice.Server.Permission.PermissionPolicyProvider">
+            <summary>
+            カスタム認可ポリシー プロバイダー
+            ポリシー名を指定して、その認可ポリシーを取得する
+            </summary>
+        </member>
+        <member name="M:BlazorPractice.Server.Permission.PermissionPolicyProvider.GetPolicyAsync(System.String)">
+            <summary>
+            "Permission"で始まっているポリシーはPermissionAuthorizationHandlerで判定・取得（多分。違うかもしれない）
+            それ以外はFallbackPolicyProviderで取得
+            </summary>
+            <param name="policyName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:BlazorPractice.Server.Permission.PermissionRequirement">
+            <summary>
+            必要な権限チェックを行うときの許可の条件
+            </summary>
+        </member>
+        <member name="P:BlazorPractice.Server.Permission.PermissionRequirement.Permission">
+            <summary>
+            この文字列を条件にUserのClaimを検索する
+            あれば認証が成功する
+            "Permission"で始まる？
+            </summary>
+        </member>
+        <member name="T:BlazorPractice.Server.Services.CurrentUserService">
+            <summary>
+            現在のユーザのClaimやIDを取得するアクセサ
+            </summary>
+        </member>
+        <member name="T:BlazorPractice.Server.Startup">
+            <summary>
+            サーバプログラムの設定
+            </summary>
         </member>
     </members>
 </doc>
