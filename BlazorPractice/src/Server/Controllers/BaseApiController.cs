@@ -6,7 +6,8 @@ using Microsoft.Extensions.Logging;
 namespace BlazorPractice.Server.Controllers
 {
     /// <summary>
-    /// Abstract BaseApi Controller Class
+    /// APIコントローラにMediatorとLoggerの実装を指示するために定義
+    /// APIバージョン指定は機能しているのか謎
     /// </summary>
     [ApiController]
     [Route("api/v{version:apiVersion}/[controller]")]

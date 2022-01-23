@@ -3,6 +3,11 @@ using System.Threading.Tasks;
 
 namespace BlazorPractice.Shared.Wrapper
 {
+    /// <summary>
+    /// どうせ検索結果以外にSucceededフラグやMessagesはクライアントで使うのでインタフェースで決めておこうという考え。
+    /// こっちはDataが無いバージョンだけど、要る？
+    /// DB更新処理など、データのレスポンスが要らない場合に使う。
+    /// </summary>
     public class Result : IResult
     {
         public Result()
@@ -64,6 +69,11 @@ namespace BlazorPractice.Shared.Wrapper
         }
     }
 
+    /// <summary>
+    /// こっちはResultクラスにデータがくっついているバージョン。
+    /// 検索結果に。
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Result<T> : Result, IResult<T>
     {
         public Result()
