@@ -86,7 +86,7 @@ namespace BlazorPractice.Server
                 FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Files")),
                 RequestPath = new PathString("/Files")
             });
-            app.UseRequestLocalizationByCulture();          // カルチャ関係だけどよく分からない
+            app.UseRequestLocalizationByCulture();          // IStringLocalizer<T>の仕様で必要
             app.UseRouting();                               // ルーティング
             app.UseAuthentication();                        // ユーザーがセキュリティで保護されたリソースにアクセスする前に、ユーザーの認証が試行されます。
             app.UseAuthorization();                         // ユーザーがセキュリティで保護されたリソースにアクセスすることが承認されます。

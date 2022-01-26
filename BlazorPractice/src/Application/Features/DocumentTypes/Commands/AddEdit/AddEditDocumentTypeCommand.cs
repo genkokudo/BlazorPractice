@@ -37,26 +37,27 @@ namespace BlazorPractice.Application.Features.DocumentTypes.Commands.AddEdit
 
         public async Task<Result<int>> Handle(AddEditDocumentTypeCommand command, CancellationToken cancellationToken)
         {
+            // リポジトリがなかったら作成して、そのキャッシュを取得
             if (await _unitOfWork.Repository<DocumentType>().Entities.Where(p => p.Id != command.Id)
                 .AnyAsync(p => p.Name == command.Name, cancellationToken))
             {
                 return await Result<int>.FailAsync(_localizer["Document type with this name already exists."]);
             }
 
-            if (command.Id == 0)
+            if (command.Id == 0)    // 追加の場合
             {
-                var documentType = _mapper.Map<DocumentType>(command);
-                await _unitOfWork.Repository<DocumentType>().AddAsync(documentType);
-                await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
+                var documentType = _mapper.Map<DocumentType>(command);                      // AutoMapperで変換
+                await _unitOfWork.Repository<DocumentType>().AddAsync(documentType);        // リポジトリに対しデータ追加メソッドを呼ぶ
+                await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);  // コミット
                 return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Saved"]);
             }
-            else
+            else    // 更新の場合、このデータはnull項目のみ更新する
             {
                 var documentType = await _unitOfWork.Repository<DocumentType>().GetByIdAsync(command.Id);
                 if (documentType != null)
                 {
-                    documentType.Name = command.Name ?? documentType.Name;
-                    documentType.Description = command.Description ?? documentType.Description;
+                    documentType.Name = command.Name ?? documentType.Name;                              // nullの場合のみ代入
+                    documentType.Description = command.Description ?? documentType.Description;         // nullの場合のみ代入
                     await _unitOfWork.Repository<DocumentType>().UpdateAsync(documentType);
                     await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllDocumentTypesCacheKey);
                     return await Result<int>.SuccessAsync(documentType.Id, _localizer["Document Type Updated"]);

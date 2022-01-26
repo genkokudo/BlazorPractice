@@ -13,7 +13,6 @@ namespace BlazorPractice.Infrastructure.Repositories
 {
     /// <summary>
     /// リポジトリが複数あるシステムの場合、片方が更新失敗しても大丈夫なように間に1クラス挟む
-    /// このシステムはリポジトリが1つしかないので、あまり意味が無いはず
     /// </summary>
     /// <typeparam name="TId"></typeparam>
 
@@ -22,7 +21,7 @@ namespace BlazorPractice.Infrastructure.Repositories
         private readonly ICurrentUserService _currentUserService;
         private readonly BlazorHeroContext _dbContext;
         private bool disposed;
-        private Hashtable _repositories;
+        private Hashtable _repositories;        // Key:Entityのクラス名, Value:対応するリポジトリクラスのインスタンス
         /// <summary>LazyCacheというライブラリを使用</summary>
         private readonly IAppCache _cache;  // BlazorPractice.Shared.Constants.Application.ApplicationConstants.Cacheで定義されているキーでキャッシュ
 
@@ -33,6 +32,11 @@ namespace BlazorPractice.Infrastructure.Repositories
             _cache = cache;
         }
 
+        /// <summary>
+        /// 型引数でEntityを指定して、そのリポジトリのインスタンスを作成し、キャッシュする
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
         public IRepositoryAsync<TEntity, TId> Repository<TEntity>() where TEntity : AuditableEntity<TId>
         {
             if (_repositories == null)
@@ -42,8 +46,10 @@ namespace BlazorPractice.Infrastructure.Repositories
 
             if (!_repositories.ContainsKey(type))
             {
+                // 指定されたリポジトリがない場合、インスタンスを作成してリポジトリリストに溜める
                 var repositoryType = typeof(RepositoryAsync<,>);
 
+                // _dbContextを持ったTEntityに対するリポジトリを作成
                 var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity), typeof(TId)), _dbContext);
 
                 _repositories.Add(type, repositoryInstance);

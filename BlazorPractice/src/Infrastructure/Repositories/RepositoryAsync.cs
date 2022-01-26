@@ -11,9 +11,10 @@ namespace BlazorPractice.Infrastructure.Repositories
     /// <summary>
     /// 各テーブルのCRUDを行うdbContextラッパー
     /// 型引数を使うことで、CRUDのコードを統一する
+    /// コミットは行っていない
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <typeparam name="TId"></typeparam>
+    /// <typeparam name="T">Entity</typeparam>
+    /// <typeparam name="TId">IDの型</typeparam>
     public class RepositoryAsync<T, TId> : IRepositoryAsync<T, TId> where T : AuditableEntity<TId>
     {
         private readonly BlazorHeroContext _dbContext;
@@ -25,6 +26,11 @@ namespace BlazorPractice.Infrastructure.Repositories
 
         public IQueryable<T> Entities => _dbContext.Set<T>();
 
+        /// <summary>
+        /// レコード追加
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public async Task<T> AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
@@ -42,6 +48,10 @@ namespace BlazorPractice.Infrastructure.Repositories
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// 全取得
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<T>> GetAllAsync()
         {
             return await _dbContext
@@ -49,11 +59,22 @@ namespace BlazorPractice.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// IDを指定してデータ取得
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<T> GetByIdAsync(TId id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
+        /// <summary>
+        /// ページングに対応したデータ取得、絞り込みは考慮していない
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         public async Task<List<T>> GetPagedResponseAsync(int pageNumber, int pageSize)
         {
             return await _dbContext
@@ -64,6 +85,11 @@ namespace BlazorPractice.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// レコード更新
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public Task UpdateAsync(T entity)
         {
             T exist = _dbContext.Set<T>().Find(entity.Id);

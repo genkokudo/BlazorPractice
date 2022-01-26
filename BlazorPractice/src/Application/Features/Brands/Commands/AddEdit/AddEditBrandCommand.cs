@@ -40,6 +40,7 @@ namespace BlazorPractice.Application.Features.Brands.Commands.AddEdit
             if (command.Id == 0)
             {
                 var brand = _mapper.Map<Brand>(command);
+                // リポジトリがなかったら作成して、そのキャッシュを取得
                 await _unitOfWork.Repository<Brand>().AddAsync(brand);
                 await _unitOfWork.CommitAndRemoveCache(cancellationToken, ApplicationConstants.Cache.GetAllBrandsCacheKey);
                 return await Result<int>.SuccessAsync(brand.Id, _localizer["Brand Saved"]);

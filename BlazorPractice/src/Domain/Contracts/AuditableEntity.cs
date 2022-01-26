@@ -5,7 +5,7 @@ namespace BlazorPractice.Domain.Contracts
     /// <summary>
     /// IDと監査項目を持たせているEntityの抽象クラス
     /// 
-    /// でもこれだとDBのプライマリキー指定[Key]は？
+    /// でもこれだとDBのプライマリキー指定[Key]は？→IdがPKeyになるのがEFの仕様
     /// </summary>
     /// <typeparam name="TId"></typeparam>
     public abstract class AuditableEntity<TId> : IAuditableEntity<TId>

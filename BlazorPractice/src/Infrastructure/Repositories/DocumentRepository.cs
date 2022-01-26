@@ -8,6 +8,7 @@ namespace BlazorPractice.Infrastructure.Repositories
 {
     public class DocumentRepository : IDocumentRepository
     {
+        // DocumentType削除時にDocumentで使用されているか検証するのでDocumentのリポジトリをDIする
         private readonly IRepositoryAsync<Document, int> _repository;
 
         public DocumentRepository(IRepositoryAsync<Document, int> repository)

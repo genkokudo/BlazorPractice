@@ -59,7 +59,7 @@ namespace BlazorPractice.Server.Extensions
             });
 
         /// <summary>
-        /// カルチャ関係だけどよく分からない
+        /// IStringLocalizerの使用で必要
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>

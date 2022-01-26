@@ -74,7 +74,7 @@ namespace BlazorPractice.Client.Extensions
                     .GetRequiredService<IHttpClientFactory>()
                     .CreateClient(ClientName)
                     .EnableIntercept(sp))                                   // @inject IHttpClientInterceptor Interceptorで、すべてのHTTPリクエストを送信する前後に発生するイベントを登録できるライブラリ https://www.nuget.org/packages/Toolbelt.Blazor.HttpClientInterceptor/
-                .AddHttpClient(ClientName, client =>
+                .AddHttpClient(ClientName, client =>                        // サーバープロジェクトへのリクエスト時にアクセストークンを含むHttpClientインスタンスを提供する。これがあるときにサインインせずにAPIを叩くとエラーになるので注意。
                 {
                     client.DefaultRequestHeaders.AcceptLanguage.Clear();
                     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd(CultureInfo.DefaultThreadCurrentCulture?.TwoLetterISOLanguageName);

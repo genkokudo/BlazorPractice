@@ -447,7 +447,7 @@
         </member>
         <member name="M:BlazorPractice.Server.Extensions.ApplicationBuilderExtensions.UseRequestLocalizationByCulture(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
             <summary>
-            カルチャ関係だけどよく分からない
+            IStringLocalizerの使用で必要
             </summary>
             <param name="app"></param>
             <returns></returns>
